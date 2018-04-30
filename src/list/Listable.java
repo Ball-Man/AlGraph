@@ -9,5 +9,5 @@ public interface Listable {
   public boolean getFinished();
 
   // Insert / Remove
-  public Listable remove();
+  public Listable removeNext();
 }
