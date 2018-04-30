@@ -4,6 +4,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 
+import algraph.Edge;
+
 public class App extends Application {
   public static void main(String[] args) {
     launch(args);
@@ -35,6 +37,11 @@ public class App extends Application {
     primaryStage.setScene(scene);
 
     primaryStage.show();
-    }
+
+    Edge.setLayout(graph);
+    Edge edge = new Edge(1, 1, 20);
+    edge.setPointFrom(20, 100);
+    edge.setPointTo(300, 300);
+  }
 }
 
