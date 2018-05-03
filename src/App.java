@@ -24,7 +24,6 @@ public class App extends Application {
 
     // Central work area
     Pane graph = new Pane();
-    graph.setStyle("-fx-background-color: #FF0000;");
 
     // Menu
     Menu file = new Menu("File");
@@ -40,8 +39,7 @@ public class App extends Application {
 
     Edge.setLayout(graph);
     Edge edge = new Edge(1, 1, 20);
-    edge.setPointFrom(20, 100);
-    edge.setPointTo(300, 300);
+    edge.setLine(50, 50, 200, 350);
   }
 }
 

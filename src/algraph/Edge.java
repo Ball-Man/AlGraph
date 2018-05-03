@@ -88,14 +88,17 @@ public class Edge implements Listable {
   }
 
   // Layout
-  public void setPointFrom(int x, int y) {
-    _line.setStartX(x);
-    _line.setStartY(y);
+  public void setLine(int x1, int y1, int x2, int y2) {
+    _line.setStartX(x1);
+    _line.setStartY(y1);
+    _line.setEndX(x2);
+    _line.setEndY(y2);
+
+    _text.relocate((x1 + x2) / 2, (y1 + y2) / 2);
   }
 
-  public void setPointTo(int x, int y) {
-    _line.setEndX(x);
-    _line.setEndY(y);
+  public void remove() {
+    _canvas.getChildren().removeAll(_line, _text);
   }
 
   public static Pane getLayout() {
