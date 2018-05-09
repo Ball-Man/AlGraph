@@ -5,6 +5,7 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 
 import algraph.Edge;
+import algraph.Node;
 
 public class App extends Application {
   public static void main(String[] args) {
@@ -39,7 +40,11 @@ public class App extends Application {
 
     Edge.setLayout(graph);
     Edge edge = new Edge(1, 1, 20);
-    edge.setLine(50, 50, 200, 350);
+    edge.setLine(50, 50, 700, 50);
+
+    Node.setLayout(graph);
+    Node node = new Node(5);
+    node.setPosition(120, 50);
   }
 }
 
