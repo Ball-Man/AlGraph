@@ -7,7 +7,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
 public class Edge implements Listable {
+  // Listable
   private Edge _next;
+
+  // Attributes
   private Integer _weight;
   private int _from;
   private int _to;
