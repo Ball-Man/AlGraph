@@ -6,6 +6,9 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.scene.shape.Circle;
 import javafx.scene.paint.Color;
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import list.Listable;
 
 public class Node implements Listable {
@@ -17,6 +20,9 @@ public class Node implements Listable {
   private Integer _distance;
 
   // UI elements
+  private int _x;   // Coordinates of the node
+  private int _y;
+
   static private Pane _canvas;
   private VBox _node;
 
@@ -33,6 +39,8 @@ public class Node implements Listable {
     _stackpane = new StackPane();
     _circle = new Circle(30, Color.WHITE);
     _circle.setStroke(Color.BLACK);
+    _circle.setOnMousePressed(dragMousePressed());
+    _circle.setOnMouseDragged(dragMouseDragged());
     _distanceText = new Text();
     _idText = new Text(_id.toString());
 
@@ -40,6 +48,24 @@ public class Node implements Listable {
     _node.getChildren().addAll(_distanceText, _stackpane);
 
     _canvas.getChildren().add(_node);
+  }
+
+
+  // Get the node id
+  public int getID() {
+    return _id;
+  }
+
+  // Get / Set the distance(used in the Bellman Ford algorithm)
+  public void setDistance(Integer distance) {
+    _distance = distance;
+
+    // Update layout
+    _distanceText.setText(_distance.toString());
+  }
+
+  public int getDistance() {
+    return _distance;
   }
 
   // Listable methods
@@ -72,7 +98,12 @@ public class Node implements Listable {
 
   // Layout
   public void setPosition(int x, int y) {
-    _node.relocate(x - ( _node.getBoundsInParent().getWidth() + _distanceText.getBoundsInParent().getWidth() ) / 2, y - ( _node.getBoundsInParent().getHeight() / 2 + _distanceText.getBoundsInParent().getHeight() ));
+    _x = x;
+    _y = y;
+    int newX = (int)(_x - _node.getBoundsInParent().getWidth() / 2);
+    int newY = (int)(_y - ( _node.getBoundsInParent().getHeight() / 2 + _distanceText.getBoundsInParent().getHeight() ));
+
+    _node.relocate(newX, newY);
   }
 
   public static Pane getLayout() {
@@ -81,5 +112,40 @@ public class Node implements Listable {
 
   public static void setLayout(Pane layout) {
     _canvas = layout;
+  }
+
+  public void remove() {
+    _canvas.getChildren().remove(_node); 
+  }
+
+  // Drag and drop events
+  private boolean _dragging;
+  private double _mouseX;
+  private double _mouseY;
+
+  private EventHandler<MouseEvent> dragMousePressed() {
+    return new EventHandler<MouseEvent>() {
+      public void handle(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY)
+          _dragging = true;
+          _mouseX = event.getSceneX();
+          _mouseY = event.getSceneY();
+      }
+    };
+  }
+
+  private EventHandler<MouseEvent> dragMouseDragged() {
+    return new EventHandler<MouseEvent>() {
+      public void handle(MouseEvent event) {
+        if (_dragging && event.getButton() == MouseButton.PRIMARY) {
+          double deltaX = event.getSceneX() - _mouseX;
+          double deltaY = event.getSceneY() - _mouseY;
+          setPosition(_x + (int)deltaX, _y + (int)deltaY);
+
+          _mouseX = event.getSceneX();
+          _mouseY = event.getSceneY();
+        }
+      }
+    };
   }
 }
