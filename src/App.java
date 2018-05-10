@@ -44,6 +44,7 @@ public class App extends Application {
 
     Node.setLayout(graph);
     Node node = new Node(5);
+    node.insertNext(edge);
     node.setPosition(120, 50);
   }
 }

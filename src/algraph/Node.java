@@ -20,6 +20,12 @@ public class Node implements Listable {
   private Integer _distance;
 
   // UI elements
+
+  // Drag and drop
+  // Temporary mouse data
+  private double _mouseX;
+  private double _mouseY;
+
   private int _x;   // Coordinates of the node
   private int _y;
 
@@ -30,6 +36,45 @@ public class Node implements Listable {
   private Circle _circle;
   private Text _distanceText;
   private Text _idText;
+
+  // Drag&Drop
+
+  // Update the edges' positioning according to the
+  // node's center
+  private void centerEdges() {
+    Listable[] items = getList();
+    for(int i = 0; i < items.length; i++)
+      ((Edge)items[i]).setLineStart(_x, _y);
+  }
+
+  // When clicked, saves the mouse coordinates
+  private EventHandler<MouseEvent> dragMousePressed() {
+    return new EventHandler<MouseEvent>() {
+      public void handle(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+          _mouseX = event.getSceneX();
+          _mouseY = event.getSceneY();
+        }
+      }
+    };
+  }
+
+  // When dragged, uses the difference between the new coordinates and
+  // the temporary one to move the node accordingly
+  private EventHandler<MouseEvent> dragMouseDragged() {
+    return new EventHandler<MouseEvent>() {
+      public void handle(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+          double deltaX = event.getSceneX() - _mouseX;
+          double deltaY = event.getSceneY() - _mouseY;
+          setPosition(_x + (int)deltaX, _y + (int)deltaY);
+
+          _mouseX = event.getSceneX();
+          _mouseY = event.getSceneY();
+        }
+      }
+    };
+  }
 
   public Node(int id) {
     _id = id;
@@ -110,9 +155,10 @@ public class Node implements Listable {
     _x = x;
     _y = y;
     int newX = (int)(_x - _node.getBoundsInParent().getWidth() / 2);
-    int newY = (int)(_y - ( _node.getBoundsInParent().getHeight() / 2 + _distanceText.getBoundsInParent().getHeight() ));
+    int newY = (int)(_y - _node.getBoundsInParent().getHeight() + _circle.getBoundsInParent().getHeight() / 2);
 
     _node.relocate(newX, newY);
+    centerEdges();
   }
 
   public static Pane getLayout() {
@@ -125,39 +171,5 @@ public class Node implements Listable {
 
   public void remove() {
     _canvas.getChildren().remove(_node); 
-  }
-
-  // Drag and drop events
-  // Temporary mouse data
-  private double _mouseX;
-  private double _mouseY;
-
-  // When clicked, saves the mouse coordinates
-  private EventHandler<MouseEvent> dragMousePressed() {
-    return new EventHandler<MouseEvent>() {
-      public void handle(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-          _mouseX = event.getSceneX();
-          _mouseY = event.getSceneY();
-        }
-      }
-    };
-  }
-
-  // When dragged, uses the difference between the new coordinates and
-  // the temporary one to move the node accordingly
-  private EventHandler<MouseEvent> dragMouseDragged() {
-    return new EventHandler<MouseEvent>() {
-      public void handle(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY) {
-          double deltaX = event.getSceneX() - _mouseX;
-          double deltaY = event.getSceneY() - _mouseY;
-          setPosition(_x + (int)deltaX, _y + (int)deltaY);
-
-          _mouseX = event.getSceneX();
-          _mouseY = event.getSceneY();
-        }
-      }
-    };
   }
 }
