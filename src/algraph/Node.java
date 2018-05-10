@@ -119,25 +119,28 @@ public class Node implements Listable {
   }
 
   // Drag and drop events
-  private boolean _dragging;
+  // Temporary mouse data
   private double _mouseX;
   private double _mouseY;
 
+  // When clicked, saves the mouse coordinates
   private EventHandler<MouseEvent> dragMousePressed() {
     return new EventHandler<MouseEvent>() {
       public void handle(MouseEvent event) {
-        if (event.getButton() == MouseButton.PRIMARY)
-          _dragging = true;
+        if (event.getButton() == MouseButton.PRIMARY) {
           _mouseX = event.getSceneX();
           _mouseY = event.getSceneY();
+        }
       }
     };
   }
 
+  // When dragged, uses the difference between the new coordinates and
+  // the temporary one to move the node accordingly
   private EventHandler<MouseEvent> dragMouseDragged() {
     return new EventHandler<MouseEvent>() {
       public void handle(MouseEvent event) {
-        if (_dragging && event.getButton() == MouseButton.PRIMARY) {
+        if (event.getButton() == MouseButton.PRIMARY) {
           double deltaX = event.getSceneX() - _mouseX;
           double deltaY = event.getSceneY() - _mouseY;
           setPosition(_x + (int)deltaX, _y + (int)deltaY);
