@@ -91,6 +91,7 @@ public class Edge implements Listable {
   }
 
   // Layout
+  // Line positioning
   public void setLine(int x1, int y1, int x2, int y2) {
     _line.setStartX(x1);
     _line.setStartY(y1);
@@ -98,6 +99,20 @@ public class Edge implements Listable {
     _line.setEndY(y2);
 
     _text.relocate((x1 + x2) / 2, (y1 + y2) / 2);
+  }
+
+  public void setLineStart(int x, int y) {
+    _line.setStartX(x);
+    _line.setStartY(y);
+
+    _text.relocate((x + _line.getEndX()) / 2, (y + _line.getEndY()) / 2);
+  }
+
+  public void setLineEnd(int x, int y) {
+    _line.setEndX(x);
+    _line.setEndY(y);
+
+    _text.relocate((_line.getStartX() + x) / 2, (_line.getStartY() + y) / 2);
   }
 
   public void remove() {
