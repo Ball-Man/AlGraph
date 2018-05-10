@@ -3,6 +3,7 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
+import vector.Vector;
 
 import algraph.Edge;
 import algraph.Node;
