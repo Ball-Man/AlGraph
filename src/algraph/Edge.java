@@ -90,6 +90,15 @@ public class Edge implements Listable {
     return this;
   }
 
+  // Inserts a single node as next node in the list
+  // and preserves the list's structure
+  public Listable insertNext(Listable next) {
+    next.setNext(_next);
+    _next = (Edge)next;
+
+    return _next;
+  }
+
   // Layout
   // Line positioning
   public void setLine(int x1, int y1, int x2, int y2) {

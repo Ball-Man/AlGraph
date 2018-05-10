@@ -10,6 +10,7 @@ public interface Listable {
 
   // Insert / Remove
   public Listable removeNext();
+  public Listable insertNext(Listable next);
 
   // Get an array containing the list of next items
   public default Listable[] getList() {
