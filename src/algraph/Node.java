@@ -96,7 +96,14 @@ public class Node implements Listable {
   }
 
 
-  // Get the node id
+  // Get / Set the node id
+  public void setID(int id) {
+    _id = id;
+
+    // Update layout
+    _idText.setText(_id.toString());
+  }
+
   public int getID() {
     return _id;
   }
@@ -170,6 +177,13 @@ public class Node implements Listable {
   }
 
   public void remove() {
-    _canvas.getChildren().remove(_node); 
+    _canvas.getChildren().remove(_node);
+
+    // Remove all edges coming from the removed node
+    Listable head = this;
+    while (!head.getFinished()) {
+      ((Edge)head.getNext()).remove();
+      head = head.getNext();
+    }
   }
 }
