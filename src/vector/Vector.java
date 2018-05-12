@@ -56,4 +56,8 @@ public class Vector<T> {
   public T at(int i) {
     return _array[i];
   }
+
+  public T[] getArray() {
+    return _array;
+  }
 }
