@@ -43,6 +43,9 @@ CFLAGS := -d $(BUILD_DIR) -sourcepath $(SRC_DIR)
 
 all: $(BUILD_DIR)/$(ARCHIVE)
 
+run: $(BUILD_DIR)/$(ARCHIVE)
+	java -jar $<
+
 # Create jar archive
 $(BUILD_DIR)/$(ARCHIVE): $(dir $(OBJS)) $(OBJS)
 	cd $(BUILD_DIR); jar cfm $(ARCHIVE) $(ACT_MANIFEST) *
