@@ -1,8 +1,11 @@
 package vector;
 
 import java.lang.Math;
+import java.lang.Iterable;
+import java.util.Iterator;
+import java.util.Arrays;
 
-public class Vector<T> {
+public class Vector<T> implements Iterable<T> {
   // Info
   private int _capacity;
   private int _length;
@@ -59,5 +62,10 @@ public class Vector<T> {
 
   public T[] getArray() {
     return _array;
+  }
+
+  // Iterable interface
+  public Iterator<T> iterator() {
+    return Arrays.asList(_array).subList(0, _length).iterator();
   }
 }
