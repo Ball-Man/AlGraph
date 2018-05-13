@@ -7,6 +7,7 @@ import vector.Vector;
 
 import algraph.Edge;
 import algraph.Node;
+import algraph.Graph;
 
 public class App extends Application {
   public static void main(String[] args) {
@@ -40,13 +41,19 @@ public class App extends Application {
     primaryStage.show();
 
     Edge.setLayout(graph);
-    Edge edge = new Edge(1, 1, 20);
-    edge.setLine(50, 50, 700, 50);
-
     Node.setLayout(graph);
-    Node node = new Node(5);
-    node.insertNext(edge);
-    node.setPosition(120, 50);
+    Graph g = new Graph();
+
+    g.addNode();
+    g.addNode();
+    g.addNode();
+
+    g.addEdge(0, 1, 10);
+    g.addEdge(1, 2, 20);
+    g.addEdge(2, 0, 30);
+
+    g.updateEdges();
+
   }
 }
 

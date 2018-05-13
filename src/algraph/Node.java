@@ -19,6 +19,9 @@ public class Node implements Listable {
   private Integer _id;
   private Integer _distance;
 
+  // Parent graph
+  private Graph _parent;
+
   // UI elements
 
   // Drag and drop
@@ -38,22 +41,13 @@ public class Node implements Listable {
   private Text _idText;
 
   // Drag&Drop
-
-  // Update the edges' positioning according to the
-  // node's center
-  private void centerEdges() {
-    Listable[] items = getList();
-    for(int i = 0; i < items.length; i++)
-      ((Edge)items[i]).setLineStart(_x, _y);
-  }
-
   // When clicked, saves the mouse coordinates
   private EventHandler<MouseEvent> dragMousePressed() {
     return new EventHandler<MouseEvent>() {
       public void handle(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-          _mouseX = event.getSceneX();
-          _mouseY = event.getSceneY();
+          _mouseX = event.getScreenX();
+          _mouseY = event.getScreenY();
         }
       }
     };
@@ -65,34 +59,54 @@ public class Node implements Listable {
     return new EventHandler<MouseEvent>() {
       public void handle(MouseEvent event) {
         if (event.getButton() == MouseButton.PRIMARY) {
-          double deltaX = event.getSceneX() - _mouseX;
-          double deltaY = event.getSceneY() - _mouseY;
-          setPosition(_x + (int)deltaX, _y + (int)deltaY);
-
-          _mouseX = event.getSceneX();
-          _mouseY = event.getSceneY();
+          double deltaX = event.getScreenX() - _mouseX;
+          double deltaY = event.getScreenY() - _mouseY;
+          setPosition(_x + (int)deltaX, _y + (int)deltaY);    // Update current position
+                                                              // and starting edges
+          _parent.updateEdgesTo(_id, _x, _y);     // Update ending edges
+          
+          _mouseX = event.getScreenX();
+          _mouseY = event.getScreenY();
         }
       }
     };
   }
 
-  public Node(int id) {
+  public Node(int id, Graph parent) {
     _id = id;
+    _parent = parent;
 
     // Layout
+    // Node
     _node = new VBox();
+    
+    // Stackpane for circle and text
     _stackpane = new StackPane();
+
+    // Actual node(circle)
     _circle = new Circle(30, Color.WHITE);
     _circle.setStroke(Color.BLACK);
     _circle.setOnMousePressed(dragMousePressed());
     _circle.setOnMouseDragged(dragMouseDragged());
+    
+    // Distance text(used by Bellman-Ford algorithm)
     _distanceText = new Text();
     _idText = new Text(_id.toString());
 
+    // Add everything to canvas
     _stackpane.getChildren().addAll(_circle, _idText);
     _node.getChildren().addAll(_distanceText, _stackpane);
 
     _canvas.getChildren().add(_node);
+
+    // Relocate node to the center of the screen
+    _x = (int)_canvas.getBoundsInParent().getWidth() / 2;
+    _y = (int)_canvas.getBoundsInParent().getHeight() / 2;
+    int newX = (int)(_x - _node.getBoundsInParent().getWidth() / 2);
+    int newY = (int)(_y - _node.getBoundsInParent().getHeight() + _circle.getBoundsInParent().getHeight() / 2 - _distanceText.getBoundsInParent().getHeight());
+
+    _node.relocate(newX, newY);
+
   }
 
 
@@ -118,6 +132,15 @@ public class Node implements Listable {
 
   public int getDistance() {
     return _distance;
+  }
+
+  // Get center coordinates
+  public int getX() {
+    return _x;
+  }
+
+  public int getY() {
+    return _y;
   }
 
   // Listable methods
@@ -165,7 +188,15 @@ public class Node implements Listable {
     int newY = (int)(_y - _node.getBoundsInParent().getHeight() + _circle.getBoundsInParent().getHeight() / 2);
 
     _node.relocate(newX, newY);
-    centerEdges();
+    updateEdges();
+  }
+
+  // Update the edges' positioning according to the
+  // node's center
+  public void updateEdges() {
+    Listable[] items = getList();
+    for(int i = 0; i < items.length; i++)
+      ((Edge)items[i]).setLineStart(_x, _y);
   }
 
   public static Pane getLayout() {
