@@ -43,14 +43,7 @@ public class App extends Application {
     Graph.setEdgesLayout(below);
     Graph.setNodesLayout(above);
     Graph g = new Graph();
-
-    g.addNode();
-    g.addNode();
-    g.addNode();
-
-    g.addEdge(0, 1, 10);
-    g.addEdge(1, 2, 20);
-    g.addEdge(2, 0, 30);
+    g.randomize(5, 8, -10, 10);
 
     g.updateEdges();
 
