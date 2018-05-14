@@ -55,9 +55,13 @@ public class Vector<T> implements Iterable<T> {
       _array[i] = _array[i + 1];
   }
 
-  // Get element at i position
+  // Get / Set element at i position
   public T at(int i) {
     return _array[i];
+  }
+
+  public void setAt(int i, T value) {
+    _array[i] = value;
   }
 
   public T[] getArray() {
