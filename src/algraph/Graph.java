@@ -1,11 +1,17 @@
 package algraph;
 
+import java.util.concurrent.ThreadLocalRandom;
 import vector.Vector;
 import list.Listable;
+import javafx.scene.layout.*;
 
 public class Graph {
   // Adjacency list
   private Vector<Node> _graph;
+
+  // Layouts
+  private static Pane _edgesCanvas;
+  private static Pane _nodesCanvas;
 
   public Graph() {
     _graph = new Vector<Node>();
@@ -13,7 +19,13 @@ public class Graph {
 
   // Dynamic management
   public void addNode() {
-    _graph.push(new Node(_graph.getLength(), this));
+    Node newNode = new Node(_graph.getLength(), this);
+    _graph.push(newNode);
+
+    // Random positioning
+    int randX = ThreadLocalRandom.current().nextInt(0, (int)_nodesCanvas.getBoundsInParent().getWidth());
+    int randY = ThreadLocalRandom.current().nextInt(0, (int)_nodesCanvas.getBoundsInParent().getHeight());
+    newNode.setPosition(randX, randY);
   }
 
   public boolean removeNode(int id) {
@@ -89,5 +101,16 @@ public class Graph {
       node.updateEdges();   // Update edges from the specific node
       updateEdgesTo(node.getID(), node.getX(), node.getY());
     }
+  }
+
+  // Layout management
+  public static void setEdgesLayout(Pane canvas) {
+    _edgesCanvas = canvas;
+    Edge.setLayout(canvas);
+  }
+
+  public static void setNodesLayout(Pane canvas) {
+    _nodesCanvas = canvas;
+    Node.setLayout(canvas);
   }
 }

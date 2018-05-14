@@ -4,9 +4,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import vector.Vector;
-
-import algraph.Edge;
-import algraph.Node;
 import algraph.Graph;
 
 public class App extends Application {
@@ -43,8 +40,8 @@ public class App extends Application {
 
     primaryStage.show();
 
-    Edge.setLayout(below);
-    Node.setLayout(above);
+    Graph.setEdgesLayout(below);
+    Graph.setNodesLayout(above);
     Graph g = new Graph();
 
     g.addNode();

@@ -11,7 +11,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import list.Listable;
 
-public class Node implements Listable {
+class Node implements Listable {
   // Listable
   private Edge _next;
   
