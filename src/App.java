@@ -26,7 +26,10 @@ public class App extends Application {
     BorderPane root = new BorderPane();
 
     // Central work area
-    Pane graph = new Pane();
+    StackPane graph = new StackPane();
+    Pane above = new Pane();
+    Pane below = new Pane();
+    graph.getChildren().addAll(below, above);
 
     // Menu
     Menu file = new Menu("File");
@@ -40,8 +43,8 @@ public class App extends Application {
 
     primaryStage.show();
 
-    Edge.setLayout(graph);
-    Node.setLayout(graph);
+    Edge.setLayout(below);
+    Node.setLayout(above);
     Graph g = new Graph();
 
     g.addNode();
