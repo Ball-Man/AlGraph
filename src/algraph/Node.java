@@ -191,6 +191,17 @@ public class Node implements Listable {
     int newX = (int)(_x - _node.getBoundsInParent().getWidth() / 2);
     int newY = (int)(_y - _node.getBoundsInParent().getHeight() + _circle.getBoundsInParent().getHeight() / 2);
 
+    // Check for nodes not to go above the menubar
+    if (newX < 0) {
+      newX = 0;
+      _x = (int)_node.getBoundsInParent().getWidth() / 2;
+    }
+
+    if (newY < 0) {
+      newY = 0;
+      _y = (int)(_node.getBoundsInParent().getHeight() - _circle.getBoundsInParent().getHeight() / 2);
+    }
+
     _node.relocate(newX, newY);
     updateEdges();
   }
