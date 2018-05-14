@@ -91,7 +91,11 @@ public class Node implements Listable {
     
     // Distance text(used by Bellman-Ford algorithm)
     _distanceText = new Text();
+
+    // Text inside the circle(showing the node's ID)
     _idText = new Text(_id.toString());
+    _idText.setOnMousePressed(dragMousePressed());
+    _idText.setOnMouseDragged(dragMouseDragged());
 
     // Add everything to canvas
     _stackpane.getChildren().addAll(_circle, _idText);
