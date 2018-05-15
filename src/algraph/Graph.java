@@ -17,6 +17,10 @@ public class Graph {
     _graph = new Vector<Node>();
   }
 
+  public void clear() {
+    _graph = new Vector<Node>();
+  }
+
   public boolean randomize(int nodes, int edges, int wStart, int wEnd) {
     // If nodes or edges are negative, or edges are more than the maximum amount
     // return false
@@ -136,6 +140,36 @@ public class Graph {
   // Simplyfied overload; Creates an edge with the given weight
   public boolean addEdge(int from, int to, int w) {
     return addEdge(from, to, w, w);
+  }
+
+  // Remove an edge if exists
+  public boolean removeEdge(int from, int to) {
+    // If one of the given nodes doesn't exist, return false
+    if (from < 0 || to < 0 || from >= _graph.getLength() || to >= _graph.getLength())
+      return false;
+
+    Listable head = _graph.at(from);
+    while (!head.getFinished()) {
+      if (((Edge)head.getNext()).getTo() == to) {
+        ((Edge)head.getNext()).remove();
+        head.removeNext();
+        return true;
+      }
+      head = head.getNext();
+    }
+
+    // If the edge isn't found, return false
+    return false;
+  }
+
+  // Edit an edge's weight
+  public boolean editEdge(int from, int to, int newFrom, int newTo, int newWeight) {
+    if (removeEdge(from, to)) {
+      addEdge(newFrom, newTo, newWeight);
+      return true;
+    }
+
+    return false;
   }
 
   // Update edges going towards a specific node
