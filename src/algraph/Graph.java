@@ -50,16 +50,12 @@ public class Graph {
 
       // Create edge according to the given data
       addEdge(node, adj.at(node).at(edge), wStart, wEnd);
-      System.out.println("Was here!");
 
       // Remove the chosen data so that it can't be chosen again
       adj.at(node).remove(edge);
       if (adj.at(node).getLength() == 0)  // If no edges remain for a specific node
         adj.remove(node);                 // remove the node
-      System.out.println("And here!");
     }
-
-    System.out.println("Yay");
 
     return true;
   }
