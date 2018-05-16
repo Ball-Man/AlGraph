@@ -81,7 +81,19 @@ public class Core {
     return new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        _graph.addNode();
+        if (_graph.getNodesLength() < NewWindow.MAXNODES)
+          _graph.addNode();
+        else
+          Window.showError("Error", "Maximum number of nodes reached(10).");
+      }
+    };
+  }
+
+  private EventHandler<ActionEvent> removeNodeAction() {
+    return new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        
       }
     };
   }
