@@ -43,6 +43,7 @@ public class Core {
 
   private EventHandler<ActionEvent> saveAction() {
     return new EventHandler<ActionEvent>() {
+      @Override
       public void handle(ActionEvent event) {
         
       }
@@ -51,6 +52,7 @@ public class Core {
 
   private EventHandler<ActionEvent> loadAction() {
     return new EventHandler<ActionEvent>() {
+      @Override
       public void handle(ActionEvent event) {
         
       }
@@ -59,6 +61,7 @@ public class Core {
 
   private EventHandler<ActionEvent> infoAction() {
     return new EventHandler<ActionEvent>() {
+      @Override
       public void handle(ActionEvent event) {
 
       }
@@ -67,8 +70,18 @@ public class Core {
 
   private EventHandler<ActionEvent> quitAction() {
     return new EventHandler<ActionEvent>() {
+      @Override
       public void handle(ActionEvent event) {
         Platform.exit();
+      }
+    };
+  }
+
+  private EventHandler<ActionEvent> addNodeAction() {
+    return new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        _graph.addNode();
       }
     };
   }
@@ -97,6 +110,7 @@ public class Core {
 
     // Edit menu's items
     MenuItem editAddNode = new MenuItem("Add node");
+    editAddNode.setOnAction(addNodeAction());
     MenuItem editRemoveNode = new MenuItem("Remove node");
     MenuItem editAddEdge = new MenuItem("Add edge");
     MenuItem editRemoveEdge = new MenuItem("Remove edge");
