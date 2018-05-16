@@ -7,7 +7,7 @@ import javafx.scene.control.MenuItem;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import window.Window;
-import algraph.windows.NewWindow;
+import algraph.windows.*;
 import window.Method;
 
 public class Core {
@@ -93,7 +93,15 @@ public class Core {
     return new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        
+        RemoveNodeWindow window = new RemoveNodeWindow();
+        window.setOnOk(new Method(){
+          @Override
+          public void invoke() {
+            if (!_graph.removeNode(window.getNode()))
+              Window.showError("Error", "The given node doesn't exist.");
+          }
+        });
+        window.start();
       }
     };
   }
@@ -124,6 +132,7 @@ public class Core {
     MenuItem editAddNode = new MenuItem("Add node");
     editAddNode.setOnAction(addNodeAction());
     MenuItem editRemoveNode = new MenuItem("Remove node");
+    editRemoveNode.setOnAction(removeNodeAction());
     MenuItem editAddEdge = new MenuItem("Add edge");
     MenuItem editRemoveEdge = new MenuItem("Remove edge");
     MenuItem editEditEdge = new MenuItem("Edit edge");
