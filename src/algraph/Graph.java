@@ -26,6 +26,10 @@ public class Graph {
     _graph = new Vector<Node>();
   }
 
+  public int getNodesLength() {
+    return _graph.getLength();
+  }
+
   public boolean randomize(int nodes, int edges, int wStart, int wEnd) {
     // If nodes or edges are negative, or edges are more than the maximum amount
     // return false
@@ -175,11 +179,9 @@ public class Graph {
   }
 
   // Edit an edge's weight
-  public boolean editEdge(int from, int to, int newFrom, int newTo, int newWeight) {
-    if (removeEdge(from, to)) {
-      addEdge(newFrom, newTo, newWeight);
-      return true;
-    }
+  public boolean editEdge(int from, int to, int newWeight) {
+    if (removeEdge(from, to))
+      return addEdge(from, to, newWeight);
 
     return false;
   }
