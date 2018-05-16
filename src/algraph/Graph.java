@@ -26,6 +26,10 @@ public class Graph {
     _graph = new Vector<Node>();
   }
 
+  public int getNodesLength() {
+    return _graph.getLength();
+  }
+
   public boolean randomize(int nodes, int edges, int wStart, int wEnd) {
     // If nodes or edges are negative, or edges are more than the maximum amount
     // return false
