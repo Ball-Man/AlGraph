@@ -9,15 +9,20 @@ public class Graph {
   // Adjacency list
   private Vector<Node> _graph;
 
-  // Layouts
-  private static Pane _edgesCanvas;
-  private static Pane _nodesCanvas;
+  // Layout
+  private int _wLimit;
+  private int _hLimit;
 
-  public Graph() {
+  public Graph(int w, int h) {
     _graph = new Vector<Node>();
+
+    _wLimit = w;
+    _hLimit = h;
   }
 
   public void clear() {
+    for (Node node : _graph)
+      node.remove();
     _graph = new Vector<Node>();
   }
 
@@ -77,8 +82,8 @@ public class Graph {
     _graph.push(newNode);
 
     // Random positioning
-    int randX = ThreadLocalRandom.current().nextInt(0, (int)_nodesCanvas.getBoundsInParent().getWidth());
-    int randY = ThreadLocalRandom.current().nextInt(0, (int)_nodesCanvas.getBoundsInParent().getHeight());
+    int randX = ThreadLocalRandom.current().nextInt(0, _wLimit);
+    int randY = ThreadLocalRandom.current().nextInt(0, _hLimit);
     newNode.setPosition(randX, randY);
   }
 
@@ -209,16 +214,5 @@ public class Graph {
       node.updateEdges();   // Update edges from the specific node
       updateEdgesTo(node.getID(), node.getX(), node.getY());
     }
-  }
-
-  // Layout management
-  public static void setEdgesLayout(Pane canvas) {
-    _edgesCanvas = canvas;
-    Edge.setLayout(canvas);
-  }
-
-  public static void setNodesLayout(Pane canvas) {
-    _nodesCanvas = canvas;
-    Node.setLayout(canvas);
   }
 }

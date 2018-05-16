@@ -5,8 +5,11 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import vector.Vector;
 import algraph.Graph;
+import algraph.Core;
 
 public class App extends Application {
+  private Core _core; 
+
   public static void main(String[] args) {
     launch(args);
   }
@@ -28,25 +31,24 @@ public class App extends Application {
     Pane below = new Pane();
     graph.getChildren().addAll(below, above);
 
-    // Menu
-    Menu file = new Menu("File");
-    MenuBar menu = new MenuBar(file);
+    // Menu creation
+    MenuBar menu = new MenuBar();
 
+    // Scene setup
     root.setTop(menu);
     root.setCenter(graph);
 
     Scene scene = new Scene(root, 700, 450); 
     primaryStage.setScene(scene);
-
     primaryStage.show();
 
-    Graph.setEdgesLayout(below);
-    Graph.setNodesLayout(above);
-    Graph g = new Graph();
-    g.randomize(5, 8, -10, 10);
+    // Core
+    // Set layouts
+    Core.setEdgesLayout(below);
+    Core.setNodesLayout(above);
 
-    g.updateEdges();
-
+    // Core creation
+    _core = new Core(menu);
   }
 }
 
