@@ -179,11 +179,9 @@ public class Graph {
   }
 
   // Edit an edge's weight
-  public boolean editEdge(int from, int to, int newFrom, int newTo, int newWeight) {
-    if (removeEdge(from, to)) {
-      addEdge(newFrom, newTo, newWeight);
-      return true;
-    }
+  public boolean editEdge(int from, int to, int newWeight) {
+    if (removeEdge(from, to))
+      return addEdge(from, to, newWeight);
 
     return false;
   }
