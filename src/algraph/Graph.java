@@ -27,12 +27,19 @@ public class Graph {
     if (nodes < 0 || edges < 0 || edges > nodes * (nodes - 1))
       return false;
 
-    _graph = new Vector<Node>();
+    clear();
     for (int i = 0; i < nodes; i++)
       addNode();
 
-    // Compute all the possible edges
+    // adj contains all the possible existing direct edges
     Vector<Vector<Integer> > adj = new Vector<Vector<Integer> >(nodes);
+
+    // contains all the nodes that still can have edges coming from them
+    Vector<Integer> availableNodes = new Vector<Integer>(nodes);
+    for (int i = 0; i < availableNodes.getLength(); i++)
+      availableNodes.setAt(i, i);
+
+    // Compute all the possible edges
     for (int i = 0; i < adj.getLength(); i++)
       adj.setAt(i, new Vector<Integer>(nodes - 1));
 
@@ -49,16 +56,16 @@ public class Graph {
     // Choose randomly between all the possible edges, removing them so that
     // the same one is never chosen twice
     for (int i = 0; i < edges; i++) {
-      int node = ThreadLocalRandom.current().nextInt(0, adj.getLength());
-      int edge = ThreadLocalRandom.current().nextInt(0, adj.at(node).getLength());
+      int node = ThreadLocalRandom.current().nextInt(0, availableNodes.getLength());
+      int edge = ThreadLocalRandom.current().nextInt(0, adj.at(availableNodes.at(node)).getLength());
 
       // Create edge according to the given data
-      addEdge(node, adj.at(node).at(edge), wStart, wEnd);
+      addEdge(availableNodes.at(node), adj.at(availableNodes.at(node)).at(edge), wStart, wEnd);
 
       // Remove the chosen data so that it can't be chosen again
-      adj.at(node).remove(edge);
-      if (adj.at(node).getLength() == 0)  // If no edges remain for a specific node
-        adj.remove(node);                 // remove the node
+      adj.at(availableNodes.at(node)).remove(edge);
+      if (adj.at(availableNodes.at(node)).getLength() == 0)  // If no edges remain for a specific node
+        availableNodes.remove(node);                         // remove the node
     }
 
     return true;
