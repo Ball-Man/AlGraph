@@ -25,7 +25,11 @@ mingw32-make
 In order to run the program, from the project root execute the following command:
 ```shell
 # Should work on both Linux and Windows
-# (Requires java, obv) 
+# (Requires java, obv)
+make run
+
+# or
+
 java -jar build/AlGraph.jar
 ``` 
 
