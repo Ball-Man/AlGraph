@@ -6,7 +6,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-public class Edge implements Listable {
+class Edge implements Listable {
   // Listable
   private Edge _next;
 
@@ -62,6 +62,10 @@ public class Edge implements Listable {
     return _to;
   }
 
+  public int getLength() {
+    return 0;
+  }
+
   // Listable methods
   public Listable getNext() {
     return _next;
@@ -107,21 +111,21 @@ public class Edge implements Listable {
     _line.setEndX(x2);
     _line.setEndY(y2);
 
-    _text.relocate((x1 + x2) / 2, (y1 + y2) / 2);
+    _text.relocate((x1 + 2 * x2) / 3, (y1 + 2 * y2) / 3);
   }
 
   public void setLineStart(int x, int y) {
     _line.setStartX(x);
     _line.setStartY(y);
 
-    _text.relocate((x + _line.getEndX()) / 2, (y + _line.getEndY()) / 2);
+    _text.relocate((x + 2 * _line.getEndX()) / 3, (y + 2 * _line.getEndY()) / 3);
   }
 
   public void setLineEnd(int x, int y) {
     _line.setEndX(x);
     _line.setEndY(y);
 
-    _text.relocate((_line.getStartX() + x) / 2, (_line.getStartY() + y) / 2);
+    _text.relocate((_line.getStartX() + 2 * x) / 3, (_line.getStartY() + 2 * y) / 3);
   }
 
   public void remove() {

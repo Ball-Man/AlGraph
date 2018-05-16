@@ -4,12 +4,12 @@ import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import vector.Vector;
-
-import algraph.Edge;
-import algraph.Node;
 import algraph.Graph;
+import algraph.Core;
 
 public class App extends Application {
+  private Core _core; 
+
   public static void main(String[] args) {
     launch(args);
   }
@@ -26,34 +26,29 @@ public class App extends Application {
     BorderPane root = new BorderPane();
 
     // Central work area
-    Pane graph = new Pane();
+    StackPane graph = new StackPane();
+    Pane above = new Pane();
+    Pane below = new Pane();
+    graph.getChildren().addAll(below, above);
 
-    // Menu
-    Menu file = new Menu("File");
-    MenuBar menu = new MenuBar(file);
+    // Menu creation
+    MenuBar menu = new MenuBar();
 
+    // Scene setup
     root.setTop(menu);
     root.setCenter(graph);
 
     Scene scene = new Scene(root, 700, 450); 
     primaryStage.setScene(scene);
-
     primaryStage.show();
 
-    Edge.setLayout(graph);
-    Node.setLayout(graph);
-    Graph g = new Graph();
+    // Core
+    // Set layouts
+    Core.setEdgesLayout(below);
+    Core.setNodesLayout(above);
 
-    g.addNode();
-    g.addNode();
-    g.addNode();
-
-    g.addEdge(0, 1, 10);
-    g.addEdge(1, 2, 20);
-    g.addEdge(2, 0, 30);
-
-    g.updateEdges();
-
+    // Core creation
+    _core = new Core(menu);
   }
 }
 

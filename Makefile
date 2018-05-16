@@ -33,8 +33,11 @@ endif
 # Implementation
 #
 
+# Recursive wildcard function
+rwildcard = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+
 # Find objects thanks to sources
-SRCS := $(wildcard $(SRC_DIR)/*.$(SRC_EXTENSION)) $(wildcard $(SRC_DIR)/**/*.$(SRC_EXTENSION))
+SRCS := $(call rwildcard,$(SRC_DIR)/,*.$(SRC_EXTENSION))
 OBJS := $(SRCS:$(SRC_DIR)/%.$(SRC_EXTENSION)=$(BUILD_DIR)/%.$(OBJ_EXTENSION))
 ACT_MANIFEST := $(realpath $(MANIFEST))
 
