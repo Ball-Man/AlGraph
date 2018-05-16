@@ -142,6 +142,25 @@ public class Core {
     };
   }
 
+  private EventHandler<ActionEvent> editEdgeAction() {
+    return new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        EditEdgeWindow window = new EditEdgeWindow();
+        window.setOnOk(new Method(){
+          @Override
+          public void invoke() {
+            if (!_graph.editEdge(window.getFrom(), window.getTo(), window.getWeight()))
+              Window.showError("Error", "Invalid or not existing edge.");
+            else
+              _graph.updateEdges();
+          }
+        });
+        window.start();
+      }
+    };
+  }
+
   public Core(MenuBar menu) {
     // Graph creation
     _graph = new Graph((int)_nodesCanvas.getBoundsInParent().getWidth(), (int)_nodesCanvas.getBoundsInParent().getHeight());
@@ -173,7 +192,8 @@ public class Core {
     editAddEdge.setOnAction(addEdgeAction());
     MenuItem editRemoveEdge = new MenuItem("Remove edge");
     editRemoveEdge.setOnAction(removeEdgeAction());
-    MenuItem editEditEdge = new MenuItem("Edit edge");
+    MenuItem editEditEdge = new MenuItem("Edit edge's weigth");
+    editEditEdge.setOnAction(editEdgeAction());
     edit.getItems().addAll(editAddNode, editRemoveNode, editAddEdge, editRemoveEdge, editEditEdge);
 
     menu.getMenus().addAll(file, edit, run); 
