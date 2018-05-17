@@ -7,6 +7,7 @@ import javafx.scene.control.MenuItem;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
 import java.io.*;
+import javafx.stage.*;
 import window.Window;
 import algraph.windows.*;
 import window.Method;
@@ -46,17 +47,41 @@ public class Core {
     return new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        if (!saveGraph("/tmp/graph.ser"))
+        // Setup window for saving file
+        FileChooser dialog = new FileChooser();
+        dialog.setTitle("Save graph");
+        dialog.getExtensionFilters().addAll(
+          new FileChooser.ExtensionFilter("Serialized graph(.ser)", "*.ser"),
+          new FileChooser.ExtensionFilter("All Files(.*)", "*.*"));
+        File file = dialog.showSaveDialog(new Stage());
+        
+        // If no file has been selected
+        if (file == null)
+          return;
+
+        if (!saveGraph(file))
           Window.showError("Error", "Invalid file.");
       }
     };
   }
 
-  private EventHandler<ActionEvent> loadAction() {
+  private EventHandler<ActionEvent> openAction() {
     return new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        if (loadGraph("/tmp/graph.ser")) {
+        // Setup window for laoding file
+        FileChooser dialog = new FileChooser();
+        dialog.setTitle("Open graph");
+        dialog.getExtensionFilters().addAll(
+          new FileChooser.ExtensionFilter("Serialized graph(.ser)", "*.ser"),
+          new FileChooser.ExtensionFilter("All Files(.*)", "*.*"));
+        File file = dialog.showOpenDialog(new Stage());
+
+        // If no file has been selected
+        if (file == null)
+          return;
+
+        if (openGraph(file)) {
           _graph.generateGUI();
           _graph.updateEdges();
           return;
@@ -184,13 +209,13 @@ public class Core {
     fileNew.setOnAction(newAction());
     MenuItem fileSave = new MenuItem("Save");
     fileSave.setOnAction(saveAction());
-    MenuItem fileLoad = new MenuItem("Load");
-    fileLoad.setOnAction(loadAction());
+    MenuItem fileOpen = new MenuItem("Open");
+    fileOpen.setOnAction(openAction());
     MenuItem fileInfo = new MenuItem("Info");
     fileInfo.setOnAction(infoAction());
     MenuItem fileQuit = new MenuItem("Quit");
     fileQuit.setOnAction(quitAction());
-    file.getItems().addAll(fileNew, fileSave, fileLoad, fileInfo, fileQuit);
+    file.getItems().addAll(fileNew, fileSave, fileOpen, fileInfo, fileQuit);
 
     // Edit menu's items
     MenuItem editAddNode = new MenuItem("Add node");
@@ -208,9 +233,9 @@ public class Core {
     menu.getMenus().addAll(file, edit, run); 
   }
 
-  public boolean saveGraph(String filename) {
+  public boolean saveGraph(File file) {
     try {
-      FileOutputStream stream = new FileOutputStream(filename);
+      FileOutputStream stream = new FileOutputStream(file);
       ObjectOutputStream serializer = new ObjectOutputStream(stream);
       
       // Serialize graph
@@ -227,11 +252,11 @@ public class Core {
     return true;
   }
 
-  public boolean loadGraph(String filename) {
+  public boolean openGraph(File file) {
     Graph graph;
     
     try {
-      FileInputStream stream = new FileInputStream(filename);
+      FileInputStream stream = new FileInputStream(file);
       ObjectInputStream deserializer = new ObjectInputStream(stream);
 
       // Deserialize graph in a temporary variable
