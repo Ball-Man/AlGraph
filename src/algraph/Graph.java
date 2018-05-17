@@ -5,7 +5,7 @@ import vector.Vector;
 import list.Listable;
 import javafx.scene.layout.*;
 
-public class Graph {
+public class Graph implements java.io.Serializable {
   // Adjacency list
   private Vector<Node> _graph;
 
@@ -216,5 +216,13 @@ public class Graph {
       node.updateEdges();   // Update edges from the specific node
       updateEdgesTo(node.getID(), node.getX(), node.getY());
     }
+  }
+
+  // Generate the graph GUI
+  // This assumes all the needed data(coordinates, edges etc.) are loaded;
+  // Suitable for deserialization
+  public void generateGUI() {
+    for (Node node : _graph)
+      node.generateGUI();
   }
 }

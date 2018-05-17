@@ -5,7 +5,7 @@ import java.lang.Iterable;
 import java.util.Iterator;
 import java.util.Arrays;
 
-public class Vector<T> implements Iterable<T> {
+public class Vector<T> implements Iterable<T>, java.io.Serializable {
   // Info
   private int _capacity;
   private int _length;
