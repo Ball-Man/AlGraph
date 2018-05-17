@@ -6,7 +6,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-class Edge implements Listable {
+class Edge implements Listable, java.io.Serializable {
   // Listable
   private Edge _next;
 
@@ -18,8 +18,8 @@ class Edge implements Listable {
   // UI elements
   static private Pane _canvas;
 
-  private Line _line;
-  private Text _text;
+  private transient Line _line;
+  private transient Text _text;
 
   public Edge(int from, int to, int w) {
     _from = from;
@@ -27,9 +27,7 @@ class Edge implements Listable {
     _weight = w;
 
     // Layout
-    _line = new Line();
-    _text = new Text(0, 0, _weight.toString());
-    _canvas.getChildren().addAll(_line, _text);
+    generateGUI();
   }
 
   // Get / Set the edge weight
@@ -130,6 +128,12 @@ class Edge implements Listable {
 
   public void remove() {
     _canvas.getChildren().removeAll(_line, _text);
+  }
+
+  public void generateGUI() {
+    _line = new Line();
+    _text = new Text(0, 0, _weight.toString());
+    _canvas.getChildren().addAll(_line, _text);
   }
 
   public static Pane getLayout() {

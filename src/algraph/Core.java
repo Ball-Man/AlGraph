@@ -6,6 +6,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import java.io.*;
 import window.Window;
 import algraph.windows.*;
 import window.Method;
@@ -45,7 +46,8 @@ public class Core {
     return new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        
+        if (!saveGraph("/tmp/graph.ser"))
+          Window.showError("Error", "Invalid file.");
       }
     };
   }
@@ -54,7 +56,14 @@ public class Core {
     return new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-        
+        if (loadGraph("/tmp/graph.ser")) {
+          _graph.generateGUI();
+          _graph.updateEdges();
+          return;
+        }
+        // Else..
+
+        Window.showError("Error", "Invalid file.");
       }
     };
   }
@@ -197,6 +206,50 @@ public class Core {
     edit.getItems().addAll(editAddNode, editRemoveNode, editAddEdge, editRemoveEdge, editEditEdge);
 
     menu.getMenus().addAll(file, edit, run); 
+  }
+
+  public boolean saveGraph(String filename) {
+    try {
+      FileOutputStream stream = new FileOutputStream(filename);
+      ObjectOutputStream serializer = new ObjectOutputStream(stream);
+      
+      // Serialize graph
+      serializer.writeObject(_graph);
+
+      serializer.close();
+      stream.close();
+    }
+    catch (Exception e) {
+      Window.showError("Error", e.getMessage());
+      return false;
+    }
+
+    return true;
+  }
+
+  public boolean loadGraph(String filename) {
+    Graph graph;
+    
+    try {
+      FileInputStream stream = new FileInputStream(filename);
+      ObjectInputStream deserializer = new ObjectInputStream(stream);
+
+      // Deserialize graph in a temporary variable
+      graph = (Graph)deserializer.readObject();
+
+      deserializer.close();
+      stream.close();
+    }
+    catch (Exception e) {
+      Window.showError("Error", e.getMessage());
+      return false;
+    }
+
+    // If no exceptions occurred replace the old graph
+    _graph.clear();
+    _graph = graph;
+
+    return true;
   }
 
   // Layout management

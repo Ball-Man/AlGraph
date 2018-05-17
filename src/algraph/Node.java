@@ -11,7 +11,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import list.Listable;
 
-class Node implements Listable {
+class Node implements Listable, java.io.Serializable {
   // Listable
   private Edge _next;
   
@@ -31,12 +31,12 @@ class Node implements Listable {
   private int _x;   // Coordinates of the node
   private int _y;
 
-  static private Pane _canvas;
-  private VBox _node;
+  static private transient Pane _canvas;
+  private transient VBox _node;
 
-  private StackPane _stackpane;
-  private Circle _circle;
-  private Text _idText;
+  private transient StackPane _stackpane;
+  private transient Circle _circle;
+  private transient Text _idText;
 
   // Drag&Drop
   // When clicked, saves the mouse coordinates
@@ -74,28 +74,7 @@ class Node implements Listable {
     _parent = parent;
 
     // Layout
-    // Node
-    _node = new VBox();
-    
-    // Stackpane for circle and text
-    _stackpane = new StackPane();
-
-    // Actual node(circle)
-    _circle = new Circle(30, Color.WHITE);
-    _circle.setStroke(Color.BLACK);
-    _circle.setOnMousePressed(dragMousePressed());
-    _circle.setOnMouseDragged(dragMouseDragged());
-
-    // Text inside the circle(showing the node's ID)
-    _idText = new Text(_id.toString());
-    _idText.setOnMousePressed(dragMousePressed());
-    _idText.setOnMouseDragged(dragMouseDragged());
-
-    // Add everything to canvas
-    _stackpane.getChildren().addAll(_circle, _idText);
-    _node.getChildren().add(_stackpane);
-
-    _canvas.getChildren().add(_node);
+    generateGUI();
   }
 
 
@@ -204,5 +183,36 @@ class Node implements Listable {
       ((Edge)head.getNext()).remove();
       head = head.getNext();
     }
+  }
+
+  public void generateGUI() {
+    // Node
+    _node = new VBox();
+    
+    // Stackpane for circle and text
+    _stackpane = new StackPane();
+
+    // Actual node(circle)
+    _circle = new Circle(30, Color.WHITE);
+    _circle.setStroke(Color.BLACK);
+    _circle.setOnMousePressed(dragMousePressed());
+    _circle.setOnMouseDragged(dragMouseDragged());
+
+    // Text inside the circle(showing the node's ID)
+    _idText = new Text(_id.toString());
+    _idText.setOnMousePressed(dragMousePressed());
+    _idText.setOnMouseDragged(dragMouseDragged());
+
+    // Add everything to canvas
+    _stackpane.getChildren().addAll(_circle, _idText);
+    _node.getChildren().add(_stackpane);
+
+    _canvas.getChildren().add(_node);
+
+    // Generate edges' GUI
+    for (Listable edge: getList())
+      ((Edge)edge).generateGUI();
+
+    setPosition(_x, _y);
   }
 }
