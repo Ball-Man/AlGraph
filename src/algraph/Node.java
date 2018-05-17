@@ -17,7 +17,6 @@ class Node implements Listable {
   
   // Attributes
   private Integer _id;
-  private Integer _distance;
 
   // Parent graph
   private Graph _parent;
@@ -37,7 +36,6 @@ class Node implements Listable {
 
   private StackPane _stackpane;
   private Circle _circle;
-  private Text _distanceText;
   private Text _idText;
 
   // Drag&Drop
@@ -61,8 +59,7 @@ class Node implements Listable {
         if (event.getButton() == MouseButton.PRIMARY) {
           double deltaX = event.getScreenX() - _mouseX;
           double deltaY = event.getScreenY() - _mouseY;
-          setPosition(_x + (int)deltaX, _y + (int)deltaY);    // Update current position
-                                                              // and starting edges
+          setPosition(_x + (int)deltaX, _y + (int)deltaY);
           _parent.updateEdgesTo(_id, _x, _y);     // Update ending edges
           
           _mouseX = event.getScreenX();
@@ -88,9 +85,6 @@ class Node implements Listable {
     _circle.setStroke(Color.BLACK);
     _circle.setOnMousePressed(dragMousePressed());
     _circle.setOnMouseDragged(dragMouseDragged());
-    
-    // Distance text(used by Bellman-Ford algorithm)
-    _distanceText = new Text();
 
     // Text inside the circle(showing the node's ID)
     _idText = new Text(_id.toString());
@@ -99,18 +93,9 @@ class Node implements Listable {
 
     // Add everything to canvas
     _stackpane.getChildren().addAll(_circle, _idText);
-    _node.getChildren().addAll(_distanceText, _stackpane);
+    _node.getChildren().add(_stackpane);
 
     _canvas.getChildren().add(_node);
-
-    // Relocate node to the center of the screen
-    _x = (int)_canvas.getBoundsInParent().getWidth() / 2;
-    _y = (int)_canvas.getBoundsInParent().getHeight() / 2;
-    int newX = (int)(_x - _node.getBoundsInParent().getWidth() / 2);
-    int newY = (int)(_y - _node.getBoundsInParent().getHeight() + _circle.getBoundsInParent().getHeight() / 2 - _distanceText.getBoundsInParent().getHeight());
-
-    _node.relocate(newX, newY);
-
   }
 
 
@@ -124,18 +109,6 @@ class Node implements Listable {
 
   public int getID() {
     return _id;
-  }
-
-  // Get / Set the distance(used in the Bellman Ford algorithm)
-  public void setDistance(Integer distance) {
-    _distance = distance;
-
-    // Update layout
-    _distanceText.setText(_distance.toString());
-  }
-
-  public int getDistance() {
-    return _distance;
   }
 
   // Get center coordinates
@@ -189,17 +162,17 @@ class Node implements Listable {
     _x = x;
     _y = y;
     int newX = (int)(_x - _node.getBoundsInParent().getWidth() / 2);
-    int newY = (int)(_y - _node.getBoundsInParent().getHeight() + _circle.getBoundsInParent().getHeight() / 2);
+    int newY = (int)(_y - _node.getBoundsInParent().getHeight() / 2);
 
     // Check for nodes not to go above the menubar
     if (newX < 0) {
       newX = 0;
-      _x = (int)_node.getBoundsInParent().getWidth() / 2;
+      _x = (int)(_node.getBoundsInParent().getWidth() / 2);
     }
 
     if (newY < 0) {
       newY = 0;
-      _y = (int)(_node.getBoundsInParent().getHeight() - _circle.getBoundsInParent().getHeight() / 2);
+      _y = (int)(_node.getBoundsInParent().getHeight() / 2);
     }
 
     _node.relocate(newX, newY);
