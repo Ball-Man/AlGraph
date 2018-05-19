@@ -80,6 +80,33 @@ public class Graph implements java.io.Serializable {
     return true;
   }
 
+  // Data getters
+  // Get IDs of nodes adjacent to a given one
+  public Vector<Integer> getAdj(int node) {
+    Vector<Integer> adj = new Vector<Integer>();
+
+    Listable head = _graph.at(node);
+    while (!head.getFinished()) {
+      adj.push(((Edge)head.getNext()).getTo());
+      head = head.getNext();
+    }
+
+    return adj;
+  }
+
+  // Get weight of a specific edge
+  public int getWeight(int from, int to) {
+    Listable head = _graph.at(from);
+    while (!head.getFinished()) {
+      if (((Edge)head.getNext()).getTo() == to)
+        return ((Edge)head.getNext()).getWeight();
+      head = head.getNext();
+    }
+
+    // When used by the algorithm, this should never happen
+    return Integer.MIN_VALUE;
+  }
+
   // Dynamic management
   public void addNode() {
     Node newNode = new Node(_graph.getLength(), this);
