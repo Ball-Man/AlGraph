@@ -6,6 +6,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.event.EventHandler;
 import javafx.event.ActionEvent;
+import javafx.scene.paint.Color;
 import java.io.*;
 import javafx.stage.*;
 import window.Window;
@@ -16,8 +17,20 @@ public class Core {
   // Internal graph
   private Graph _graph;
 
+  // Algorithm manager
+  private BFM _bfm;
+
   // Internal menu bar
   private MenuBar _menu;
+
+  private Menu _file;
+  private Menu _edit;
+  private Menu _run;
+
+  private MenuItem _runStart;
+  private MenuItem _runNext;
+  private MenuItem _runEnd;
+  private MenuItem _runStop;
 
   // Layouts
   private static Pane _edgesCanvas;
@@ -195,14 +208,132 @@ public class Core {
     };
   }
 
+  private EventHandler<ActionEvent> runStartAction() {
+    return new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        StartBFMWindow window = new StartBFMWindow();
+        window.setOnOk(new Method(){
+          @Override
+          public void invoke() {
+            // Manage errors
+            if (window.getFrom() < 0 || window.getTo() < 0 || window.getFrom() >= _graph.getNodesLength()
+              || window.getTo() >= _graph.getNodesLength()) {
+              Window.showError("Error", "Invalid or not existing node.");
+            return;
+            }
+            else if (window.getFrom() == window.getTo()) {
+              Window.showError("Error", "Select two different nodes.");
+              return;
+            }
+
+            _bfm = new BFM(_graph);
+            _bfm.start(window.getFrom(), window.getTo());
+            
+            startedAlgorithmSetup();
+          }
+        });
+        window.start();
+      }
+    };
+  }
+
+  private EventHandler<ActionEvent> runNextAction() {
+    return new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        switch (_bfm.next()) {
+          case 1:
+            Window.showError("Found", "Shortest path found!");
+            endedAlgorithmSetup();
+            break;
+          case 2:
+            Window.showError("Not found", "There's no path between the given nodes.");
+            endedAlgorithmSetup();
+            break;
+        };
+      }
+    };
+  }
+
+  private EventHandler<ActionEvent> runEndAction() {
+    return new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        // Execute until the end
+        int result;
+        do
+          result = _bfm.next();
+        while (result == 0);
+
+        // Then print verdict
+        switch (_bfm.next()) {
+          case 1:
+            Window.showError("Found", "Shortest path found!");
+            endedAlgorithmSetup();
+            break;
+          case 2:
+            Window.showError("Not found", "There's no path between the given nodes.");
+            endedAlgorithmSetup();
+            break;
+        };
+      }
+    };
+  }
+
+  private EventHandler<ActionEvent> runStopAction() {
+    return new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        // Everything back to white
+        for (int i = 0; i < _graph.getNodesLength(); i++)
+          _graph.setColor(i, Color.WHITE);
+
+        initAlgorithmSetup();
+      }
+    };
+  }
+
+  private void initAlgorithmSetup() {
+    _runStart.setDisable(false);
+    _runNext.setDisable(true);
+    _runEnd.setDisable(true);
+    _runStop.setDisable(true);
+
+    _file.setDisable(false);
+    _edit.setDisable(false);
+  }
+
+  private void startedAlgorithmSetup() {
+    _runStart.setDisable(true);
+    _runNext.setDisable(false);
+    _runEnd.setDisable(false);
+    _runStop.setDisable(false);
+
+    _file.setDisable(true);
+    _edit.setDisable(true);
+  }
+
+  private void endedAlgorithmSetup() {
+    _runStart.setDisable(true);
+    _runNext.setDisable(true);
+    _runEnd.setDisable(true);
+    _runStop.setDisable(false);
+
+    _file.setDisable(true);
+    _edit.setDisable(true);
+  }
+
   public Core(MenuBar menu) {
     // Graph creation
     _graph = new Graph((int)_nodesCanvas.getBoundsInParent().getWidth(), (int)_nodesCanvas.getBoundsInParent().getHeight());
 
     // Menu creation
-    Menu file = new Menu("File");
-    Menu edit = new Menu("Edit");
-    Menu run = new Menu("Run");
+    _menu = menu;
+
+    _file = new Menu("File");
+    _edit = new Menu("Edit");
+    _run = new Menu("Run");
 
     // File menu's items
     MenuItem fileNew = new MenuItem("New graph");
@@ -215,7 +346,7 @@ public class Core {
     fileInfo.setOnAction(infoAction());
     MenuItem fileQuit = new MenuItem("Quit");
     fileQuit.setOnAction(quitAction());
-    file.getItems().addAll(fileNew, fileSave, fileOpen, fileInfo, fileQuit);
+    _file.getItems().addAll(fileNew, fileSave, fileOpen, fileInfo, fileQuit);
 
     // Edit menu's items
     MenuItem editAddNode = new MenuItem("Add node");
@@ -228,9 +359,22 @@ public class Core {
     editRemoveEdge.setOnAction(removeEdgeAction());
     MenuItem editEditEdge = new MenuItem("Edit edge's weigth");
     editEditEdge.setOnAction(editEdgeAction());
-    edit.getItems().addAll(editAddNode, editRemoveNode, editAddEdge, editRemoveEdge, editEditEdge);
+    _edit.getItems().addAll(editAddNode, editRemoveNode, editAddEdge, editRemoveEdge, editEditEdge);
 
-    menu.getMenus().addAll(file, edit, run); 
+    // Run menu's items
+    _runStart = new MenuItem("Start algorithm");
+    _runStart.setOnAction(runStartAction());
+    _runNext = new MenuItem("Next step");
+    _runNext.setOnAction(runNextAction());
+    _runEnd = new MenuItem("Jump to end");
+    _runEnd.setOnAction(runEndAction());
+    _runStop = new MenuItem("Stop algorithm");
+    _runStop.setOnAction(runStopAction());
+    _run.getItems().addAll(_runStart, _runNext, _runEnd, _runStop);
+
+    _menu.getMenus().addAll(_file, _edit, _run);
+
+    initAlgorithmSetup(); 
   }
 
   public boolean saveGraph(File file) {

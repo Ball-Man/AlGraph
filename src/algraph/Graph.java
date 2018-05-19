@@ -2,8 +2,10 @@ package algraph;
 
 import java.util.concurrent.ThreadLocalRandom;
 import vector.Vector;
+import javafx.scene.paint.Color;
 import list.Listable;
 import javafx.scene.layout.*;
+import queue.Queue;
 
 public class Graph implements java.io.Serializable {
   // Adjacency list
@@ -82,12 +84,12 @@ public class Graph implements java.io.Serializable {
 
   // Data getters
   // Get IDs of nodes adjacent to a given one
-  public Vector<Integer> getAdj(int node) {
-    Vector<Integer> adj = new Vector<Integer>();
+  public Queue<Integer> getAdj(int node) {
+    Queue<Integer> adj = new Queue<Integer>();
 
     Listable head = _graph.at(node);
     while (!head.getFinished()) {
-      adj.push(((Edge)head.getNext()).getTo());
+      adj.enqueue(((Edge)head.getNext()).getTo());
       head = head.getNext();
     }
 
@@ -251,5 +253,10 @@ public class Graph implements java.io.Serializable {
   public void generateGUI() {
     for (Node node : _graph)
       node.generateGUI();
+  }
+
+  // Set color of nodes(cirlces)
+  public void setColor(int node, Color color) {
+    _graph.at(node).setColor(color);
   }
 }
