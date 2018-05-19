@@ -1,4 +1,3 @@
 Arrows for the direct edges(they're all direct)
-Menu(with its functionalities, like adding, removing, changing edges and nodes, generating a random graph etc.)
 Bellman-Ford implementation
-Graph save/load through files
+Bellman-Ford Menu(Run)
