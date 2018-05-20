@@ -1,2 +1,2 @@
 Arrows for the direct edges(they're all direct)
-Check for negatice cycles
+GUI for queue and distances

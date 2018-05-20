@@ -243,12 +243,16 @@ public class Core {
       @Override
       public void handle(ActionEvent event) {
         switch (_bfm.next()) {
-          case 1:
+          case OK:
             Window.showError("Found", "Shortest path found!");
             endedAlgorithmSetup();
             break;
-          case 2:
+          case NONE:
             Window.showError("Not found", "There's no path between the given nodes.");
+            endedAlgorithmSetup();
+            break;
+          case CYCLE:
+            Window.showError("Not found", "Found one or more negative cycles.");
             endedAlgorithmSetup();
             break;
         };
@@ -261,19 +265,23 @@ public class Core {
       @Override
       public void handle(ActionEvent event) {
         // Execute until the end
-        int result;
+        Results result;
         do
           result = _bfm.next();
-        while (result == 0);
+        while (result == Results.NEXT);
 
         // Then print verdict
         switch (_bfm.next()) {
-          case 1:
+          case OK:
             Window.showError("Found", "Shortest path found!");
             endedAlgorithmSetup();
             break;
-          case 2:
+          case NONE:
             Window.showError("Not found", "There's no path between the given nodes.");
+            endedAlgorithmSetup();
+            break;
+          case CYCLE:
+            Window.showError("Not found", "Found one or more negative cycles.");
             endedAlgorithmSetup();
             break;
         };

@@ -7,7 +7,7 @@ import list.Listable;
 import javafx.scene.layout.*;
 import queue.Queue;
 
-public class Graph implements java.io.Serializable {
+class Graph implements java.io.Serializable {
   // Adjacency list
   private Vector<Node> _graph;
 

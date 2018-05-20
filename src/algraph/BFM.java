@@ -3,7 +3,7 @@ package algraph;
 import javafx.scene.paint.Color;
 import queue.Queue;
 
-public class BFM {
+class BFM {
   // References graph
   private Graph _graph;
 
@@ -26,6 +26,8 @@ public class BFM {
   // Distance vector; Contains the distances of the nodes from the
   // Chosen root
   private int _dist[];
+  // Used to prevent negative cycles
+  private int _times[];
 
   // Solution vector
   private int _path[];
@@ -35,57 +37,10 @@ public class BFM {
 
   private boolean _found;
 
-  public BFM(Graph graph) {
-    _graph = graph;
-    _in = new boolean[_graph.getNodesLength()];    // All false
-    _dist = new int[_graph.getNodesLength()];      // All +inf
-    for (int i = 0; i < _dist.length; i++)
-      _dist[i] = Integer.MAX_VALUE;
-
-    _out = -1;        // Placeholder
-    _adj = new Queue<Integer>();
-    _path = new int[_graph.getNodesLength()];      // All -1 as placeholder
-    for (int i = 0; i < _path.length; i++)
-      _path[i] = -1;
-  }
-
-  // true if the algorithm is over
-  public int next() {
-    if (_found) {
-      analyzeAdj();
-      _found = false;
-      return 0;
-    }
-    else if (!_found && findAdj()) {
-      _found = true;
-      return 0;
-    }
-    else
-      _found = false;
-
-    if (findOut())
-      return 0;
-    
-    return getPath();
-  }
-
-  // Starts the algorithm, call once
-  public void start(int root, int dest) {
-    _started = true;
-
-    _root = root;
-    _dest = dest;
-
-    _dist[root] = 0;
-    _queue = new Queue<Integer>();
-    _queue.enqueue(root);
-
-    // Make first step
-    next();
-  }
+  private boolean _cycle;
 
   // true if successfully completes(which means the algorithm isn't over yet)
-  public boolean findOut() {
+  private boolean findOut() {
     if (_queue.getEmpty())
       return false;
 
@@ -100,18 +55,19 @@ public class BFM {
   }
 
   // true if still has nodes to analyze
-  public boolean findAdj() {
+  private boolean findAdj() {
     // If there are no more adjacent nodes to analyze
     if (_adj.getEmpty())
       return false;
 
     _to = _adj.dequeue();
+    _times[_to]++;            // Used for negative cycles discrimination
     _graph.setColor(_to, Color.YELLOW);
     return true;
   }
 
   // Analyze nodes found by findAdj
-  public void analyzeAdj() {
+  private void analyzeAdj() {
     // Check if a better path is found
     if (_dist[_out] + _graph.getWeight(_out, _to) < _dist[_to]) {
       if (!_in[_to]) {    // If not already enqueued
@@ -127,7 +83,7 @@ public class BFM {
     _graph.setColor(_to, Color.GRAY);
   }
 
-  public int getPath() {
+  private Results getPath() {
     // Back to white
     for (int i = 0; i < _graph.getNodesLength(); i++)
       _graph.setColor(i, Color.WHITE);
@@ -146,12 +102,71 @@ public class BFM {
       // Red color for root and dest
       _graph.setColor(_root, Color.RED);
       _graph.setColor(_dest, Color.RED);
-      return 2;
+      return Results.NONE;
     }
     else {              // If the shortest path is found
       _graph.setColor(parent, Color.GREEN);
-      return 1;
+      return Results.OK;
     }
+  }
+
+  public BFM(Graph graph) {
+    _graph = graph;
+    _in = new boolean[_graph.getNodesLength()];    // All false
+    _dist = new int[_graph.getNodesLength()];      // All +inf
+    for (int i = 0; i < _dist.length; i++)
+      _dist[i] = Integer.MAX_VALUE;
+
+    _out = -1;        // Placeholder
+    _adj = new Queue<Integer>();
+    _path = new int[_graph.getNodesLength()];      // All -1 as placeholder
+    for (int i = 0; i < _path.length; i++)
+      _path[i] = -1;
+
+    _times = new int[_graph.getNodesLength()];    // All 0
+  }
+
+  // Starts the algorithm, call once
+  public void start(int root, int dest) {
+    _started = true;
+
+    _root = root;
+    _dest = dest;
+
+    _dist[root] = 0;
+    _queue = new Queue<Integer>();
+    _queue.enqueue(root);
+
+    // Make first step
+    next();
+  }
+
+  // Returns 0 if the algorithm is still running,
+  // 1 if the shortest path is found
+  // 2 if there's no path between the given nodes
+  // 3 if a negative cycle is found
+  public Results next() {
+    if (_found) {
+      analyzeAdj();
+      _found = false;
+      return Results.NEXT;
+    }
+    else if (!_found && findAdj()) {
+      _found = true;
+      return Results.NEXT;
+    }
+    else
+      _found = false;
+
+    // Negative cycles
+    for (int i : _times)
+      if (i >= _graph.getNodesLength())
+        return Results.CYCLE;
+
+    if (findOut())
+      return Results.NEXT;
+    
+    return getPath();
   }
 
   // Get status
