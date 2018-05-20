@@ -3,8 +3,6 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
 import javafx.scene.control.*;
-import vector.Vector;
-import algraph.Graph;
 import algraph.Core;
 
 public class App extends Application {
@@ -38,7 +36,7 @@ public class App extends Application {
     root.setTop(menu);
     root.setCenter(graph);
 
-    Scene scene = new Scene(root, 700, 450); 
+    Scene scene = new Scene(root, 1024, 768); 
     primaryStage.setScene(scene);
     primaryStage.show();
 
@@ -49,6 +47,8 @@ public class App extends Application {
 
     // Core creation
     _core = new Core(menu);
+
+    primaryStage.setResizable(false);
   }
 }
 
