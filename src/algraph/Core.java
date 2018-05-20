@@ -1,6 +1,7 @@
 package algraph;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -19,6 +20,7 @@ public class Core {
 
   // Algorithm manager
   private BFM _bfm;
+  private BFMGUI _bfmgui;
 
   // Internal menu bar
   private MenuBar _menu;
@@ -35,6 +37,7 @@ public class Core {
   // Layouts
   private static Pane _edgesCanvas;
   private static Pane _nodesCanvas;
+  private static VBox _bfmCanvas;
 
   // Menu events
   private EventHandler<ActionEvent> newAction() {
@@ -229,6 +232,9 @@ public class Core {
 
             _bfm = new BFM(_graph);
             _bfm.start(window.getFrom(), window.getTo());
+            _bfmgui = new BFMGUI();
+            _bfmgui.updateQueue(_bfm.getQueue());
+            _bfmgui.updateDistances(_bfm.getDistances());
             
             startedAlgorithmSetup();
           }
@@ -256,6 +262,9 @@ public class Core {
             endedAlgorithmSetup();
             break;
         };
+
+        _bfmgui.updateQueue(_bfm.getQueue());
+        _bfmgui.updateDistances(_bfm.getDistances());
       }
     };
   }
@@ -285,6 +294,9 @@ public class Core {
             endedAlgorithmSetup();
             break;
         };
+
+        _bfmgui.updateQueue(_bfm.getQueue());
+        _bfmgui.updateDistances(_bfm.getDistances());
       }
     };
   }
@@ -298,6 +310,7 @@ public class Core {
           _graph.setColor(i, Color.WHITE);
 
         initAlgorithmSetup();
+        _bfmgui.remove();
       }
     };
   }
@@ -310,6 +323,8 @@ public class Core {
 
     _file.setDisable(false);
     _edit.setDisable(false);
+
+    _bfmCanvas.setVisible(false);
   }
 
   private void startedAlgorithmSetup() {
@@ -320,6 +335,8 @@ public class Core {
 
     _file.setDisable(true);
     _edit.setDisable(true);
+
+    _bfmCanvas.setVisible(true);
   }
 
   private void endedAlgorithmSetup() {
@@ -382,7 +399,7 @@ public class Core {
 
     _menu.getMenus().addAll(_file, _edit, _run);
 
-    initAlgorithmSetup(); 
+    initAlgorithmSetup();
   }
 
   public boolean saveGraph(File file) {
@@ -438,5 +455,10 @@ public class Core {
   public static void setNodesLayout(Pane canvas) {
     _nodesCanvas = canvas;
     Node.setLayout(canvas);
+  }
+
+  public static void setBFMLayout(VBox canvas) {
+    _bfmCanvas = canvas;
+    BFMGUI.setLayout(canvas);
   }
 }

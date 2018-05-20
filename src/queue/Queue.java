@@ -31,4 +31,9 @@ public class Queue<T> {
   public boolean getEmpty() {
     return _head == null;
   }
+
+  // Used to scan without changin the queue content
+  public QueueElement<T> getHead() {
+    return _head;
+  }
 }

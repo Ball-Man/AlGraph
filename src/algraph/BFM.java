@@ -48,7 +48,7 @@ class BFM {
       _graph.setColor(_out, Color.GRAY);
 
     _out = _queue.dequeue();
-    _in [_out] = false;
+    _in[_out] = false;
     _adj = _graph.getAdj(_out);
     _graph.setColor(_out, Color.ORANGE);
     return true;
@@ -135,10 +135,8 @@ class BFM {
 
     _dist[root] = 0;
     _queue = new Queue<Integer>();
-    _queue.enqueue(root);
-
-    // Make first step
-    next();
+    _queue.enqueue(_root);
+    _graph.setColor(_root, Color.YELLOW);
   }
 
   // Returns 0 if the algorithm is still running,
@@ -160,7 +158,7 @@ class BFM {
 
     // Negative cycles
     for (int i : _times)
-      if (i >= _graph.getNodesLength())
+      if (i > _graph.getNodesLength())
         return Results.CYCLE;
 
     if (findOut())
@@ -172,5 +170,13 @@ class BFM {
   // Get status
   public boolean getStarted() {
     return _started;
+  }
+
+  public Queue<Integer> getQueue() {
+    return _queue;
+  }
+
+  public int[] getDistances() {
+    return _dist;
   }
 }

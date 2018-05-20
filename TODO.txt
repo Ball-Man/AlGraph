@@ -1,2 +1,2 @@
 Arrows for the direct edges(they're all direct)
-GUI for queue and distances
+Info

@@ -1,6 +1,6 @@
 package queue;
 
-class QueueElement<T> {
+public class QueueElement<T> {
   private T _value;
   private QueueElement<T> _next;
 
