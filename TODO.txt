@@ -1,3 +1,2 @@
 Arrows for the direct edges(they're all direct)
-Bellman-Ford implementation
-Bellman-Ford Menu(Run)
+GUI for queue and distances

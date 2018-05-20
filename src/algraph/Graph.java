@@ -2,10 +2,12 @@ package algraph;
 
 import java.util.concurrent.ThreadLocalRandom;
 import vector.Vector;
+import javafx.scene.paint.Color;
 import list.Listable;
 import javafx.scene.layout.*;
+import queue.Queue;
 
-public class Graph implements java.io.Serializable {
+class Graph implements java.io.Serializable {
   // Adjacency list
   private Vector<Node> _graph;
 
@@ -78,6 +80,33 @@ public class Graph implements java.io.Serializable {
     }
 
     return true;
+  }
+
+  // Data getters
+  // Get IDs of nodes adjacent to a given one
+  public Queue<Integer> getAdj(int node) {
+    Queue<Integer> adj = new Queue<Integer>();
+
+    Listable head = _graph.at(node);
+    while (!head.getFinished()) {
+      adj.enqueue(((Edge)head.getNext()).getTo());
+      head = head.getNext();
+    }
+
+    return adj;
+  }
+
+  // Get weight of a specific edge
+  public int getWeight(int from, int to) {
+    Listable head = _graph.at(from);
+    while (!head.getFinished()) {
+      if (((Edge)head.getNext()).getTo() == to)
+        return ((Edge)head.getNext()).getWeight();
+      head = head.getNext();
+    }
+
+    // When used by the algorithm, this should never happen
+    return Integer.MIN_VALUE;
   }
 
   // Dynamic management
@@ -224,5 +253,10 @@ public class Graph implements java.io.Serializable {
   public void generateGUI() {
     for (Node node : _graph)
       node.generateGUI();
+  }
+
+  // Set color of nodes(cirlces)
+  public void setColor(int node, Color color) {
+    _graph.at(node).setColor(color);
   }
 }

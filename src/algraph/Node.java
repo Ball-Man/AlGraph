@@ -166,14 +166,6 @@ class Node implements Listable, java.io.Serializable {
       ((Edge)items[i]).setLineStart(_x, _y);
   }
 
-  public static Pane getLayout() {
-    return _canvas;
-  }
-
-  public static void setLayout(Pane layout) {
-    _canvas = layout;
-  }
-
   public void remove() {
     _canvas.getChildren().remove(_node);
 
@@ -214,5 +206,17 @@ class Node implements Listable, java.io.Serializable {
       ((Edge)edge).generateGUI();
 
     setPosition(_x, _y);
+  }
+
+  public void setColor(Color color) {
+    _circle.setFill(color);
+  }
+
+  public static Pane getLayout() {
+    return _canvas;
+  }
+
+  public static void setLayout(Pane layout) {
+    _canvas = layout;
   }
 }
