@@ -12,6 +12,9 @@ import javafx.geometry.Insets;
 import window.Window;
 import window.Method;
 
+/**
+ * Window used to edit the weight of an existing edge.
+ */
 public class EditEdgeWindow extends Window {
   public final static int MAXWEIGHT = 64;
   public final static int MINWEIGHT = -64;

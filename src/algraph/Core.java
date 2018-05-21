@@ -1,6 +1,7 @@
 package algraph;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
@@ -13,12 +14,16 @@ import window.Window;
 import algraph.windows.*;
 import window.Method;
 
+/**
+ * Main controller. 
+ */
 public class Core {
   // Internal graph
   private Graph _graph;
 
   // Algorithm manager
   private BFM _bfm;
+  private BFMGUI _bfmgui;
 
   // Internal menu bar
   private MenuBar _menu;
@@ -35,6 +40,7 @@ public class Core {
   // Layouts
   private static Pane _edgesCanvas;
   private static Pane _nodesCanvas;
+  private static VBox _bfmCanvas;
 
   // Menu events
   private EventHandler<ActionEvent> newAction() {
@@ -110,7 +116,8 @@ public class Core {
     return new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-
+        InfoWindow window = new InfoWindow();
+        window.start();
       }
     };
   }
@@ -229,6 +236,9 @@ public class Core {
 
             _bfm = new BFM(_graph);
             _bfm.start(window.getFrom(), window.getTo());
+            _bfmgui = new BFMGUI();
+            _bfmgui.updateQueue(_bfm.getQueue());
+            _bfmgui.updateDistances(_bfm.getDistances());
             
             startedAlgorithmSetup();
           }
@@ -256,6 +266,9 @@ public class Core {
             endedAlgorithmSetup();
             break;
         };
+
+        _bfmgui.updateQueue(_bfm.getQueue());
+        _bfmgui.updateDistances(_bfm.getDistances());
       }
     };
   }
@@ -285,6 +298,9 @@ public class Core {
             endedAlgorithmSetup();
             break;
         };
+
+        _bfmgui.updateQueue(_bfm.getQueue());
+        _bfmgui.updateDistances(_bfm.getDistances());
       }
     };
   }
@@ -298,10 +314,14 @@ public class Core {
           _graph.setColor(i, Color.WHITE);
 
         initAlgorithmSetup();
+        _bfmgui.remove();
       }
     };
   }
 
+  /**
+   * Setup the menu for a new algorithm ride.
+   */
   private void initAlgorithmSetup() {
     _runStart.setDisable(false);
     _runNext.setDisable(true);
@@ -310,8 +330,13 @@ public class Core {
 
     _file.setDisable(false);
     _edit.setDisable(false);
+
+    _bfmCanvas.setVisible(false);
   }
 
+  /**
+   * Setup the menu for a running algorithm.
+   */
   private void startedAlgorithmSetup() {
     _runStart.setDisable(true);
     _runNext.setDisable(false);
@@ -320,8 +345,13 @@ public class Core {
 
     _file.setDisable(true);
     _edit.setDisable(true);
+
+    _bfmCanvas.setVisible(true);
   }
 
+  /**
+   * Setup the menu for an ended algorithm.
+   */
   private void endedAlgorithmSetup() {
     _runStart.setDisable(true);
     _runNext.setDisable(true);
@@ -382,9 +412,12 @@ public class Core {
 
     _menu.getMenus().addAll(_file, _edit, _run);
 
-    initAlgorithmSetup(); 
+    initAlgorithmSetup();
   }
 
+  /**
+   * Serialize the graph into the given file.
+   */
   public boolean saveGraph(File file) {
     try {
       FileOutputStream stream = new FileOutputStream(file);
@@ -404,6 +437,9 @@ public class Core {
     return true;
   }
 
+  /**
+   * Deserialize the graph from the given file.
+   */
   public boolean openGraph(File file) {
     Graph graph;
     
@@ -429,14 +465,27 @@ public class Core {
     return true;
   }
 
-  // Layout management
+  /**
+   * Set the Edge static layout.
+   */
   public static void setEdgesLayout(Pane canvas) {
     _edgesCanvas = canvas;
     Edge.setLayout(canvas);
   }
 
+  /**
+   * Set the Node static layout.
+   */
   public static void setNodesLayout(Pane canvas) {
     _nodesCanvas = canvas;
     Node.setLayout(canvas);
+  }
+
+  /**
+   * Set the BFM static layout.
+   */
+  public static void setBFMLayout(VBox canvas) {
+    _bfmCanvas = canvas;
+    BFMGUI.setLayout(canvas);
   }
 }

@@ -12,6 +12,9 @@ import javafx.geometry.Insets;
 import window.Window;
 import window.Method;
 
+/**
+ * Window used to remove an existing node.
+ */
 public class RemoveNodeWindow extends Window {
   // GUI elements
   private TextField _txtNode;

@@ -7,6 +7,10 @@ import list.Listable;
 import javafx.scene.layout.*;
 import queue.Queue;
 
+/**
+ * Graph class containing a vector of Nodes.
+ * Can be serialized.
+ */
 class Graph implements java.io.Serializable {
   // Adjacency list
   private Vector<Node> _graph;
@@ -22,6 +26,9 @@ class Graph implements java.io.Serializable {
     _hLimit = h;
   }
 
+  /**
+   * Remove all the nodes and edges from the graph.
+   */
   public void clear() {
     for (Node node : _graph)
       node.remove();
@@ -32,6 +39,9 @@ class Graph implements java.io.Serializable {
     return _graph.getLength();
   }
 
+  /**
+   * Create the graph randomly from the given data.
+   */
   public boolean randomize(int nodes, int edges, int wStart, int wEnd) {
     // If nodes or edges are negative, or edges are more than the maximum amount
     // return false
@@ -83,7 +93,9 @@ class Graph implements java.io.Serializable {
   }
 
   // Data getters
-  // Get IDs of nodes adjacent to a given one
+  /**
+   * Get nodes adjacent to a given one.
+   */
   public Queue<Integer> getAdj(int node) {
     Queue<Integer> adj = new Queue<Integer>();
 
@@ -96,7 +108,10 @@ class Graph implements java.io.Serializable {
     return adj;
   }
 
-  // Get weight of a specific edge
+  /**
+   * Get weight of a specific edge.
+   * This assumes the given edge exists.
+   */
   public int getWeight(int from, int to) {
     Listable head = _graph.at(from);
     while (!head.getFinished()) {
@@ -110,6 +125,9 @@ class Graph implements java.io.Serializable {
   }
 
   // Dynamic management
+  /**
+   * Add a new node.
+   */
   public void addNode() {
     Node newNode = new Node(_graph.getLength(), this);
     _graph.push(newNode);
@@ -120,6 +138,12 @@ class Graph implements java.io.Serializable {
     newNode.setPosition(randX, randY);
   }
 
+  /**
+   * Remove the given node if exists.
+   * If it doesn't it returns false.
+   * This also removes all the edges starting from
+   * / ending on the removed node.
+   */
   public boolean removeNode(int id) {
     // If the given node doesn't exist, return false
     if (id >= _graph.getLength() || id < 0)
@@ -166,7 +190,11 @@ class Graph implements java.io.Serializable {
     return true;
   }
 
-  // Creates an edge with random weight from given range
+  /**
+   * Creates an edge with a random weight(from the given range) if possible.
+   * if one of the given nodes(starting/ending) doesn't exist or the specific
+   * edge already exists, returns false.
+   */
   public boolean addEdge(int from, int to, int weightStart, int weightEnd) {
     // If the one of the given nodes doesn't exist or the node already exists,
     // return false
@@ -182,7 +210,11 @@ class Graph implements java.io.Serializable {
     return true;
   }
 
-  // Simplyfied overload; Creates an edge with the given weight
+  /**
+   * Creates an edge with the given weight if possible.
+   * if one of the given nodes(starting/ending) doesn't exist or the specific
+   * edge already exists, returns false.
+   */
   public boolean addEdge(int from, int to, int w) {
     return addEdge(from, to, w, w);
   }
@@ -207,7 +239,9 @@ class Graph implements java.io.Serializable {
     return false;
   }
 
-  // Edit an edge's weight
+  /**
+   * Edit an edge's weight if possible. If not, return false.
+   */
   public boolean editEdge(int from, int to, int newWeight) {
     if (removeEdge(from, to))
       return addEdge(from, to, newWeight);
@@ -215,7 +249,9 @@ class Graph implements java.io.Serializable {
     return false;
   }
 
-  // Update edges going towards a specific node
+  /**
+   * Update line positioning for edges ending in the given node.
+   */
   public void updateEdgesTo(int to, int x, int y) {
     for (Node node : _graph) {
       Listable head = node;
@@ -227,7 +263,9 @@ class Graph implements java.io.Serializable {
     }
   }
 
-  // Check if an edge already exists
+  /**
+   * Returns true if the given edge already exists.
+   */
   public boolean edgeExists(int from, int to) {
     Listable head = _graph.at(from);
     while (!head.getFinished()) {
@@ -239,7 +277,9 @@ class Graph implements java.io.Serializable {
     return false;
   }
 
-  // Update all the edges
+  /**
+   * Update line positioning for all the existing edges.
+   */
   public void updateEdges() {
     for (Node node : _graph) {
       node.updateEdges();   // Update edges from the specific node
@@ -247,15 +287,18 @@ class Graph implements java.io.Serializable {
     }
   }
 
-  // Generate the graph GUI
-  // This assumes all the needed data(coordinates, edges etc.) are loaded;
-  // Suitable for deserialization
+  /**
+   * Generate GUI from the internal data.
+   * Suitable for serialization.
+   */
   public void generateGUI() {
     for (Node node : _graph)
       node.generateGUI();
   }
 
-  // Set color of nodes(cirlces)
+  /**
+   * Set fill color of the given node(circle).
+   */
   public void setColor(int node, Color color) {
     _graph.at(node).setColor(color);
   }
