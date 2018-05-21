@@ -12,6 +12,9 @@ import javafx.geometry.Insets;
 import window.Window;
 import window.Method;
 
+/**
+ * Window used to add a new edge.
+ */
 public class AddEdgeWindow extends Window {
   public final static int MAXWEIGHT = 64;
   public final static int MINWEIGHT = -64;

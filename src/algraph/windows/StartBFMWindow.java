@@ -12,6 +12,9 @@ import javafx.geometry.Insets;
 import window.Window;
 import window.Method;
 
+/**
+ * Window used to start the BFM algorithm.
+ */
 public class StartBFMWindow extends Window {
   // GUI elements
   private TextField _txtFrom;

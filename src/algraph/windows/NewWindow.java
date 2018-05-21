@@ -12,6 +12,9 @@ import javafx.geometry.Insets;
 import window.Window;
 import window.Method;
 
+/**
+ * Window used to create a new graph(randomized).
+ */
 public class NewWindow extends Window {
   public static final int MAXNODES = 10;
   public static final int MINWEIGHT = -64;

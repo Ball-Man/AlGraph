@@ -116,7 +116,8 @@ public class Core {
     return new EventHandler<ActionEvent>() {
       @Override
       public void handle(ActionEvent event) {
-
+        InfoWindow window = new InfoWindow();
+        window.start();
       }
     };
   }
