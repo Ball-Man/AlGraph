@@ -6,6 +6,9 @@ import javafx.scene.control.*;
 import javafx.geometry.Insets;
 import algraph.Core;
 
+/**
+ * Main class.
+ */
 public class App extends Application {
   private Core _core; 
 

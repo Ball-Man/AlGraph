@@ -10,6 +10,10 @@ import javafx.scene.paint.Color;
 import queue.*;
 
 
+/**
+ * Bellman-Ford GUI manager.
+ * (Queue, distance vector)
+ */
 class BFMGUI {
   // GUI Elements
   private static VBox _canvas;
@@ -17,6 +21,9 @@ class BFMGUI {
   private HBox _distances;
   private HBox _queue;
 
+  /**
+   * Add an integer to the current queue GUI.
+   */
   private void addToQueue(Integer integer) {
     StackPane node = new StackPane();
     Rectangle rectangle = new Rectangle(0, 0, 30, 30);
@@ -28,6 +35,9 @@ class BFMGUI {
     _queue.getChildren().add(node);
   }
 
+  /**
+   * Add an integer to the current distance vector GUI.
+   */
   private void addToDistances(Integer integer) {
     StackPane node = new StackPane();
     Rectangle rectangle = new Rectangle(0, 0, 30, 30);
@@ -53,6 +63,10 @@ class BFMGUI {
     _canvas.getChildren().addAll(distances, _distances, queue, _queue);
   }
 
+  /**
+   * Replicate the given queue in a graphic way.
+   * Iterates over addToQueue(Integer).
+   */
   public void updateQueue(Queue<Integer> queue) {
     _queue.getChildren().clear();
 
@@ -64,6 +78,10 @@ class BFMGUI {
     }
   }
 
+  /**
+   * Replicate the given array in a graphic way.
+   * Iterates over addToDistances(Integer).
+   */
   public void updateDistances(int[] distances) {
     _distances.getChildren().clear();
 
@@ -71,12 +89,16 @@ class BFMGUI {
       addToDistances(i);
   }
 
-  // Layout
+  /**
+   * Remove the current GUI from the parent node.
+   */
   public void remove() {
     _canvas.getChildren().clear();
   }
 
-  // Set Layout
+  /**
+   * Set the parent node.
+   */
   public static void setLayout(VBox canvas) {
     _canvas = canvas;
   }

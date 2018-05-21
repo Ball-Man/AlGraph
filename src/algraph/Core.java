@@ -14,6 +14,9 @@ import window.Window;
 import algraph.windows.*;
 import window.Method;
 
+/**
+ * Main controller. 
+ */
 public class Core {
   // Internal graph
   private Graph _graph;
@@ -315,6 +318,9 @@ public class Core {
     };
   }
 
+  /**
+   * Setup the menu for a new algorithm ride.
+   */
   private void initAlgorithmSetup() {
     _runStart.setDisable(false);
     _runNext.setDisable(true);
@@ -327,6 +333,9 @@ public class Core {
     _bfmCanvas.setVisible(false);
   }
 
+  /**
+   * Setup the menu for a running algorithm.
+   */
   private void startedAlgorithmSetup() {
     _runStart.setDisable(true);
     _runNext.setDisable(false);
@@ -339,6 +348,9 @@ public class Core {
     _bfmCanvas.setVisible(true);
   }
 
+  /**
+   * Setup the menu for an ended algorithm.
+   */
   private void endedAlgorithmSetup() {
     _runStart.setDisable(true);
     _runNext.setDisable(true);
@@ -402,6 +414,9 @@ public class Core {
     initAlgorithmSetup();
   }
 
+  /**
+   * Serialize the graph into the given file.
+   */
   public boolean saveGraph(File file) {
     try {
       FileOutputStream stream = new FileOutputStream(file);
@@ -421,6 +436,9 @@ public class Core {
     return true;
   }
 
+  /**
+   * Deserialize the graph from the given file.
+   */
   public boolean openGraph(File file) {
     Graph graph;
     
@@ -446,17 +464,25 @@ public class Core {
     return true;
   }
 
-  // Layout management
+  /**
+   * Set the Edge static layout.
+   */
   public static void setEdgesLayout(Pane canvas) {
     _edgesCanvas = canvas;
     Edge.setLayout(canvas);
   }
 
+  /**
+   * Set the Node static layout.
+   */
   public static void setNodesLayout(Pane canvas) {
     _nodesCanvas = canvas;
     Node.setLayout(canvas);
   }
 
+  /**
+   * Set the BFM static layout.
+   */
   public static void setBFMLayout(VBox canvas) {
     _bfmCanvas = canvas;
     BFMGUI.setLayout(canvas);

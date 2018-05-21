@@ -11,6 +11,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import list.Listable;
 
+/**
+ * A graph's node.
+ */
 class Node implements Listable, java.io.Serializable {
   // Listable
   private Edge _next;
@@ -78,7 +81,9 @@ class Node implements Listable, java.io.Serializable {
   }
 
 
-  // Get / Set the node id
+  /**
+   * Set the node's id.
+   */
   public void setID(int id) {
     _id = id;
 
@@ -86,15 +91,23 @@ class Node implements Listable, java.io.Serializable {
     _idText.setText(_id.toString());
   }
 
+  /**
+   * Get the node's id.
+   */
   public int getID() {
     return _id;
   }
 
-  // Get center coordinates
+  /**
+   * Get the node's center's x position.
+   */
   public int getX() {
     return _x;
   }
 
+  /**
+   * Get the node's center's y position.
+   */
   public int getY() {
     return _y;
   }
@@ -137,6 +150,9 @@ class Node implements Listable, java.io.Serializable {
   }
 
   // Layout
+  /**
+   * Set the node's center's position.
+   */
   public void setPosition(int x, int y) {
     _x = x;
     _y = y;
@@ -158,14 +174,18 @@ class Node implements Listable, java.io.Serializable {
     updateEdges();
   }
 
-  // Update the edges' positioning according to the
-  // node's center
+  /**
+   * Update line positioning for edges starting from this node.
+   */
   public void updateEdges() {
     Listable[] items = getList();
     for(int i = 0; i < items.length; i++)
       ((Edge)items[i]).setLineStart(_x, _y);
   }
 
+  /**
+   * Remove GUI from the parent node.
+   */
   public void remove() {
     _canvas.getChildren().remove(_node);
 
@@ -177,6 +197,9 @@ class Node implements Listable, java.io.Serializable {
     }
   }
 
+  /**
+   * Generate GUI from the internal data.
+   */
   public void generateGUI() {
     // Node
     _node = new VBox();
@@ -208,14 +231,23 @@ class Node implements Listable, java.io.Serializable {
     setPosition(_x, _y);
   }
 
+  /**
+   * Set fill color for the node(cirlce).
+   */
   public void setColor(Color color) {
     _circle.setFill(color);
   }
 
+  /**
+   * Get parent node.
+   */
   public static Pane getLayout() {
     return _canvas;
   }
 
+  /**
+   * Set parent node.
+   */
   public static void setLayout(Pane layout) {
     _canvas = layout;
   }

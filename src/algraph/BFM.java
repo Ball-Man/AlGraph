@@ -3,6 +3,9 @@ package algraph;
 import javafx.scene.paint.Color;
 import queue.Queue;
 
+/**
+ * Bellman-Ford algorithm manager. 
+ */
 class BFM {
   // References graph
   private Graph _graph;
@@ -39,7 +42,10 @@ class BFM {
 
   private boolean _cycle;
 
-  // true if successfully completes(which means the algorithm isn't over yet)
+  /**
+   * First part of the algorithm's cycle: Dequeue a node from the main queue.
+   * Returns true if the algorithm isn't over yet.
+   */
   private boolean findOut() {
     if (_queue.getEmpty())
       return false;
@@ -54,7 +60,12 @@ class BFM {
     return true;
   }
 
-  // true if still has nodes to analyze
+  /**
+   * Second part of the algorithm's cycle: Find the next adjacent node to
+   * the given one.
+   * Returns true if there are still more adjacent nodes which need to be
+   * analyzed.
+   */
   private boolean findAdj() {
     // If there are no more adjacent nodes to analyze
     if (_adj.getEmpty())
@@ -66,7 +77,11 @@ class BFM {
     return true;
   }
 
-  // Analyze nodes found by findAdj
+  /**
+   * Third part of the algorithm's cycle: Analyze the adjacent node.
+   * This will update the node's distance from the root and eventually
+   * enqueue it.
+   */
   private void analyzeAdj() {
     // Check if a better path is found
     if (_dist[_out] + _graph.getWeight(_out, _to) < _dist[_to]) {
@@ -83,6 +98,10 @@ class BFM {
     _graph.setColor(_to, Color.GRAY);
   }
 
+  /**
+   * Called when the algorithm is over; Returns the correct
+   * enum value according to the case(no path found/shortest path found).
+   */
   private Results getPath() {
     // Back to white
     for (int i = 0; i < _graph.getNodesLength(); i++)
@@ -126,7 +145,9 @@ class BFM {
     _times = new int[_graph.getNodesLength()];    // All 0
   }
 
-  // Starts the algorithm, call once
+  /**
+   * Start the algorithm. Call once.
+   */
   public void start(int root, int dest) {
     _started = true;
 
@@ -139,10 +160,14 @@ class BFM {
     _graph.setColor(_root, Color.YELLOW);
   }
 
-  // Returns 0 if the algorithm is still running,
-  // 1 if the shortest path is found
-  // 2 if there's no path between the given nodes
-  // 3 if a negative cycle is found
+  /**
+   * Proceed with the step-by-step algorithm.
+   * Returns:
+   *  0 if the algorithm is still running.
+   *  1 if the shortest path is found.
+   *  2 if there's no path between the given nodes.
+   *  3 if a negative cycle is found.
+   */
   public Results next() {
     if (_found) {
       analyzeAdj();
@@ -167,15 +192,24 @@ class BFM {
     return getPath();
   }
 
-  // Get status
+  /**
+   * Returns true if the algorithm has started.
+   */
   public boolean getStarted() {
     return _started;
   }
 
+  /**
+   * Returns the internal main queue used by the algorithm.
+   */
   public Queue<Integer> getQueue() {
     return _queue;
   }
 
+  /**
+   * Returns the internal array of distances from the root
+   * used by the algorithm.
+   */
   public int[] getDistances() {
     return _dist;
   }

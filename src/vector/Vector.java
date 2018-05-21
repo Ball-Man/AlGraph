@@ -5,6 +5,10 @@ import java.lang.Iterable;
 import java.util.Iterator;
 import java.util.Arrays;
 
+/**
+ * Dynamic generic vector class.
+ * Also iterable.
+ */
 public class Vector<T> implements Iterable<T>, java.io.Serializable {
   // Info
   private int _capacity;
@@ -26,12 +30,17 @@ public class Vector<T> implements Iterable<T>, java.io.Serializable {
     _array = (T[])new Object[_capacity];
   }
 
-  // Get length
+  /**
+   * Get the vector's length.
+   */
   public Integer getLength() {
     return _length;
   }
 
-  // Push element
+  /**
+   * Push a new element into the array.
+   * The new element is placed as the last one.
+   */
   @SuppressWarnings("unchecked")
   public void push(T element) {
     if (_length == _capacity) {
@@ -48,18 +57,25 @@ public class Vector<T> implements Iterable<T>, java.io.Serializable {
     _array[_length++] = element;
   }
 
-  // Remove array element from the given index
+  /**
+   * Remove and the items at the given index and resize the array.
+   */
   public void remove(int index) {
     _length--;
     for (int i = index; i < _length; i++)
       _array[i] = _array[i + 1];
   }
 
-  // Get / Set element at i position
+  /**
+   * Get the array element at the given position.
+   */
   public T at(int i) {
     return _array[i];
   }
 
+  /**
+   * Set the array element at the given posiition to the given value.
+   */
   public void setAt(int i, T value) {
     _array[i] = value;
   }

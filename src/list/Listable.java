@@ -1,18 +1,37 @@
 package list;
 
+/**
+ * Interface used to simulate a simple not homogeneous linked list. 
+ */
 public interface Listable {
-  // Get / Set next
+  /**
+   * Get the next linked element.
+   */
   public Listable getNext();
+
+  /**
+   * Set the next linked element.
+   */
   public void setNext(Listable next);
 
-  // Get if finished
+  /**
+   * Returns true if the next linked element is null.
+   */
   public boolean getFinished();
 
-  // Insert / Remove
+  /**
+   * Remove the next linked element and restore the list.
+   */
   public Listable removeNext();
+
+  /**
+   * Insert an element as the next one and restore the list.
+   */
   public Listable insertNext(Listable next);
 
-  // Get an array containing the list of next items
+  /**
+   * Create an array containing all the next linked elements.
+   */
   public default Listable[] getList() {
     // Count items
     int count = 0;
