@@ -34,3 +34,5 @@ java -jar build/AlGraph.jar
 ``` 
 
 Double clicking on the .jar file found in the build/ directory should also work(common on Windows systems).
+
+For more specific information check out the [wiki](https://github.com/Ball-Man/AlGraph/wiki). 
