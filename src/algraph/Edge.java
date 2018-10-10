@@ -21,7 +21,7 @@ class Edge implements Listable, java.io.Serializable {
   // UI elements
   static private Pane _canvas;
 
-  private transient Line _line;
+  private transient Arrow _line;
   private transient Text _text;
 
   public Edge(int from, int to, int w) {
@@ -127,10 +127,8 @@ class Edge implements Listable, java.io.Serializable {
    * Set the line starting and ending points.
    */
   public void setLine(int x1, int y1, int x2, int y2) {
-    _line.setStartX(x1);
-    _line.setStartY(y1);
-    _line.setEndX(x2);
-    _line.setEndY(y2);
+    this.setLineStart(x1, y1);
+    this.setLineEnd(x2, y2);
 
     _text.relocate((x1 + 2 * x2) / 3, (y1 + 2 * y2) / 3);
   }
@@ -139,8 +137,7 @@ class Edge implements Listable, java.io.Serializable {
    * Set the line starting point.
    */
   public void setLineStart(int x, int y) {
-    _line.setStartX(x);
-    _line.setStartY(y);
+    _line.setLineStart(x, y);
 
     _text.relocate((x + 2 * _line.getEndX()) / 3, (y + 2 * _line.getEndY()) / 3);
   }
@@ -149,8 +146,7 @@ class Edge implements Listable, java.io.Serializable {
    * Set the line ending point.
    */
   public void setLineEnd(int x, int y) {
-    _line.setEndX(x);
-    _line.setEndY(y);
+    _line.setLineEnd(x, y);
 
     _text.relocate((_line.getStartX() + 2 * x) / 3, (_line.getStartY() + 2 * y) / 3);
   }
@@ -166,7 +162,7 @@ class Edge implements Listable, java.io.Serializable {
    * Generate GUI from the internal data.
    */
   public void generateGUI() {
-    _line = new Line();
+    _line = new Arrow();
     _text = new Text(0, 0, _weight.toString());
     _canvas.getChildren().addAll(_line, _text);
   }

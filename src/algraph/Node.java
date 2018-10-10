@@ -15,6 +15,9 @@ import list.Listable;
  * A graph's node.
  */
 class Node implements Listable, java.io.Serializable {
+  // The radius of the circle
+  static final int RADIUS = 30;
+
   // Listable
   private Edge _next;
   
@@ -208,7 +211,7 @@ class Node implements Listable, java.io.Serializable {
     _stackpane = new StackPane();
 
     // Actual node(circle)
-    _circle = new Circle(30, Color.WHITE);
+    _circle = new Circle(this.RADIUS, Color.WHITE);
     _circle.setStroke(Color.BLACK);
     _circle.setOnMousePressed(dragMousePressed());
     _circle.setOnMouseDragged(dragMouseDragged());
