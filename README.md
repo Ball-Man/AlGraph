@@ -35,4 +35,8 @@ java -jar build/AlGraph.jar
 
 Double clicking on the .jar file found in the build/ directory should also work(common on Windows systems).
 
+Dependencies:
+  - java > 8
+  - javafx (not included in the java package anymore. On arch linux `java8-openjfx`, on debian `openjfx`)
+
 For more specific information check out the [wiki](https://github.com/Ball-Man/AlGraph/wiki). 
